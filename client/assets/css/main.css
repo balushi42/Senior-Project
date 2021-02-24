@@ -1,0 +1,39 @@
+.page-container {
+  @apply container lg:max-w-screen-lg mx-auto h-screen flex flex-col justify-center items-center text-center px-1;
+}
+
+.title {
+  @apply block text-green-700 text-5xl pb-8;
+}
+
+input {
+  @apply block focus:outline-none focus:ring focus:ring-green-400 focus:border-green-400 px-4 py-3 border-gray-300 border-2 rounded w-full md:w-6/12;
+}
+
+.btn {
+  @apply py-3 px-4 font-bold rounded-md;
+}
+
+.btn-link {
+  @apply font-normal text-green-700;
+}
+
+.btn-link:hover {
+  @apply bg-green-100;
+}
+
+.btn-link:focus {
+  @apply outline-none ring ring-green-400;
+}
+
+.btn-primary {
+  @apply bg-green-500 text-white;
+}
+
+.btn-primary:hover {
+  @apply bg-green-600;
+}
+
+.btn-primary:focus {
+  @apply outline-none ring ring-green-400;
+}
