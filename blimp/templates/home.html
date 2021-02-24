@@ -20,7 +20,16 @@
         modal.style.display = "block";
     }
     function closeupload(){
-    modal.style.display = "none";
+        modal.style.display = "none";
+    }
+    function searchvids(){
+        var query = document.getElementById("query").value;
+        $.ajax({
+          url: "{% url 'home' %}?query="+query,
+          success: function (response) {
+            document.getElementById("search-result").innerHTML = response['search-result'];
+          }
+        });
     }
 </script>
 {% endblock %}
@@ -33,6 +42,7 @@
         <form method="post" enctype="multipart/form-data" class="form-horizontal">
             {% csrf_token %}
             <div class="form-group">
+              <input type="text" name="title" required="True">
               <label for="name" class="col-md-3 col-sm-3 col-xs-12 control-label">File: </label>
               <div class="col-md-8">
                 <input type="file" name="file" id="file" required="True" class="form-control">
@@ -48,26 +58,13 @@
   </div>
 <button onclick="openupload()">Upload</button>
 <h2>Home</h2>
+<input type="text" name="query" id="query">
+<button onclick="searchvids()">Search</button>
 <h4>uploaded videos</h4>
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Title</th>
-        <th>Video</th>
-    </tr>
-    {% for video in videos %}
-    <tr>
-        <th>{{video.date_uploaded}}</th>
-        <th>{{video.title}}</th>
-        <th>
-            <video width='400' controls>
-            <source src='{{video.file}}' type='video/mp4'>
-            Your browser does not support the video tag.
-            </video>
-        </th>
-    </tr>
-    {% endfor %}
-</table>
+
+<div id="search-result">
+{% include "include/video_list.html" %}
+</div>
 
 
 {% endblock %}

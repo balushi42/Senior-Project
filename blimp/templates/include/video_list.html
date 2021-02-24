@@ -1,0 +1,19 @@
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Title</th>
+        <th>Video</th>
+    </tr>
+    {% for video in videos %}
+    <tr>
+        <th>{{video.date_uploaded}}</th>
+        <th>{{video.title}}</th>
+        <th>
+            <video width='400' controls>
+            <source src='{{video.file.url}}' type='video/mp4'>
+            Your browser does not support the video tag.
+            </video>
+        </th>
+    </tr>
+    {% endfor %}
+</table>
