@@ -15,11 +15,13 @@ def home(request):
 
         if file.name.endswith('.mp4'):
             Video(file=file, title=title).save()
+        elif file._size > 10485760:
+            messages.error(request,'File size too DARN big *_*')
         else:
             messages.error(request,'File is not of video type')
     elif request.method == 'GET' and request.GET.get('query'):
-    	#rank baed on search terms
-    	videos = Video.objects.annotate(rank=Value(0, IntegerField())) # setup with raking 0
+    	#rank based on search terms
+    	videos = Video.objects.annotate(rank=Value(0, IntegerField())) # initilize ranking with raking 0 >>> This is a start. The final system will include catagorizing step prior to posting.(details will be included in specification paper)
 
     	for term in re.split('\W+', request.GET.get('query')):
     		videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
