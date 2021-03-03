@@ -1,0 +1,39 @@
+{% extends 'include/base.html' %}
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
+
+{% block content %}
+<h2>video - {{ video.title }}</h2>
+<video width='500' controls>
+<source src='{{video.file.url}}' type='video/mp4'>
+Your browser does not support the video tag.
+</video>
+
+<br>
+
+{% if request.user.is_authenticated %}
+<form method="POST">
+React:
+{% csrf_token %}
+<input type="text" name="reaction">
+<input type="submit" name="react!">
+</form>
+<br>
+{% endif %}
+
+Reactions:
+<br>
+
+{% for reaction in reactions %}
+{{ reaction.raw }} {{ reaction.date }}
+{% endfor %}
+
+{% if reactions.count == 0 %}
+None
+{% endif %}
+
+{% endblock %}

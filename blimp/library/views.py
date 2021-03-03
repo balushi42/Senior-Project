@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django import template
 from library.models import *
 from django.contrib import messages
@@ -39,3 +39,15 @@ def home(request):
     videos = Video.objects.all()
 
     return render(request, 'home.html', {'videos':videos})
+
+def video_detail(request):
+	vidID = request.GET.get('vidId')
+	vidObj = get_object_or_404(Video, id=vidID)
+
+	if request.method == "POST" and request.POST.get('reaction') and request.user.is_authenticated:
+		React(raw=request.POST.get('reaction'), video=vidObj, user=request.user).save()
+
+	reactions = vidObj.reactions.all().order_by('-date')
+
+	return render(request, 'video_detail.html', {'video':vidObj,
+												 'reactions':reactions})

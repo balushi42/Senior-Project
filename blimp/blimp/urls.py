@@ -27,6 +27,7 @@ urlpatterns = [
     path('accounts/profile/', core_views.profile, name='account_view'),
     path('accounts/signup/', core_views.SignUp.as_view(), name='signup'),
     path('', library_views.home, name='home'),
+    path('watch', library_views.video_detail, name='watch'),
 ]
 
 if settings.DEBUG:
