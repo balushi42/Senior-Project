@@ -3,6 +3,7 @@
         <th>Date</th>
         <th>Title</th>
         <th>Video</th>
+        <th>Category</th>
     </tr>
     {% for video in videos %}
     <tr>
@@ -13,6 +14,9 @@
             <source src='{{video.file.url}}' type='video/mp4'>
             Your browser does not support the video tag.
             </video>
+        </th>
+        <th>
+        {{video.category.title}}
         </th>
     </tr>
     {% endfor %}

@@ -12,9 +12,10 @@ def home(request):
     if request.method == 'POST':
         file = request.FILES["file"]
         title = request.POST.get("title")
-
+        category = request.POST.get("category")
+        categoryobj = Category.objects.get(title=category)
         if file.name.endswith('.mp4'):
-            Video(file=file, title=title).save()
+            Video(file=file, title=title, category=categoryobj).save()
         elif file._size > 10485760:
             messages.error(request,'File size too DARN big *_*')
         else:
@@ -45,9 +46,8 @@ def video_detail(request):
 	vidObj = get_object_or_404(Video, id=vidID)
 
 	if request.method == "POST" and request.POST.get('reaction') and request.user.is_authenticated:
-		React(raw=request.POST.get('reaction'), video=vidObj, user=request.user).save()
+		React(text=request.POST.get('reaction'), video=vidObj, user=request.user).save()
 
 	reactions = vidObj.reactions.all().order_by('-date')
-
 	return render(request, 'video_detail.html', {'video':vidObj,
 												 'reactions':reactions})
