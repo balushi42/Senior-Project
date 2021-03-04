@@ -7,7 +7,7 @@
     {% for video in videos %}
     <tr>
         <th>{{video.date_uploaded}}</th>
-        <th>{{video.title}}</th>
+        <th><a href="{% url 'watch' %}?vidId={{ video.id }}">{{video.title}}</a></th>
         <th>
             <video width='400' controls>
             <source src='{{video.file.url}}' type='video/mp4'>
