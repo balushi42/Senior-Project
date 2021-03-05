@@ -1,0 +1,89 @@
+{% extends 'include/base.html' %}
+
+{% block stylesheet %}
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+function toggleMenu() {
+  var menuBox = document.getElementById('menu-box');
+  var selection = document.getElementById('selection');
+  var emoji = document.getElementById('emoji');
+  if(menuBox.style.display != "block") { // if is menuBox hidden, display it
+    emoji.value = selection.value;
+    selection.setAttribute("disabled",true);
+    menuBox.style.display = "block";
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<br>
+<a href="{% url 'home' %}"> home</a>
+<h2>video - {{ video.title }}</h2>
+<video width='500' controls>
+<source src='{{video.file.url}}' type='video/mp4'>
+Your browser does not support the video tag.
+</video>
+
+<br>
+
+{% if request.user.is_authenticated %}
+ <form method="POST">
+<select id="selection" onchange="toggleMenu()">
+<option>None</option>
+{% for emoji in video.category.PHI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+
+
+{% for emoji in video.category.PLI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+
+
+{% for emoji in video.category.NHI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+
+
+{% for emoji in video.category.NLI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+</select>
+
+
+<ul id="menu-box" style="display: none">
+ 
+React:
+{% csrf_token %}
+<input type="text" name="reaction">
+<input type="hidden" name="emoji" id="emoji" >
+<input type="hidden" name="timestamp" value="00:00">
+<input type="submit" name="react!">
+
+</ul>
+Report:
+<br>
+<button>Report Violation</button>
+</form>
+<br>
+{% endif %}
+
+
+
+Reactions:
+<br>
+
+{% for reaction in reactions %}
+{{ reaction.emoji }} {{ reaction.text }} {{ reaction.date }}<br>
+{% endfor %}
+
+{% if reactions.count == 0 %}
+None
+{% endif %}
+
+
+{% endblock %}

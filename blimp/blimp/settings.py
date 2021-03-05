@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'library',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,9 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/videos/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'videos')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}

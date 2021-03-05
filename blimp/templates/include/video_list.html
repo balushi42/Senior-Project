@@ -3,16 +3,29 @@
         <th>Date</th>
         <th>Title</th>
         <th>Video</th>
+        <th>Group Points</th>
+        <th>Viral Points</th>
+        <th>Category</th>
+        
     </tr>
     {% for video in videos %}
     <tr>
         <th>{{video.date_uploaded}}</th>
-        <th>{{video.title}}</th>
+        <th><a href="{% url 'watch' %}?vidId={{ video.id }}">{{video.title}}</a></th>
         <th>
             <video width='400' controls>
             <source src='{{video.file.url}}' type='video/mp4'>
             Your browser does not support the video tag.
             </video>
+        </th>
+        <th>
+        {{video.group}}
+        </th>
+        <th>
+        {{video.viral}}
+        </th>
+        <th>
+        {{video.category.title}}
         </th>
     </tr>
     {% endfor %}
