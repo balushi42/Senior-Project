@@ -3,12 +3,24 @@
 {% block stylesheet %}
 {% endblock %}
 
+
 {% block javascript %}
+<script>
+function toggleMenu() {
+  var menuBox = document.getElementById('menu-box');    
+  if(menuBox.style.display == "block") { // if is menuBox displayed, hide it
+    menuBox.style.display = "none";
+  }
+  else { // if is menuBox hidden, display it
+    menuBox.style.display = "block";
+  }
+}
+</script>
 {% endblock %}
 
 {% block content %}
 <br>
-<a href="{% url 'home' %}"><-home</a>
+<a href="{% url 'home' %}"> home</a>
 <h2>video - {{ video.title }}</h2>
 <video width='500' controls>
 <source src='{{video.file.url}}' type='video/mp4'>
@@ -18,7 +30,9 @@ Your browser does not support the video tag.
 <br>
 
 {% if request.user.is_authenticated %}
-<form method="POST">
+<p id="menu" onclick="toggleMenu()"> React</p>
+<ul id="menu-box" style="display: none">
+  <form method="POST">
 React:
 {% csrf_token %}
 <input type="text" name="reaction">
@@ -26,6 +40,8 @@ React:
 </form>
 <br>
 {% endif %}
+
+</ul>
 
 Reactions:
 <br>

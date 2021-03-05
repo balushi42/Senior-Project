@@ -10,10 +10,10 @@ class Emoji(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
-    PHI = models.ForeignKey(Emoji, related_name="PHI_catagories", on_delete=models.PROTECT)
-    PLI = models.ForeignKey(Emoji, related_name="PLI_catagories", on_delete=models.PROTECT)
-    NHI = models.ForeignKey(Emoji, related_name="NHI_catagories", on_delete=models.PROTECT)
-    NLI = models.ForeignKey(Emoji, related_name="NLI_catagories", on_delete=models.PROTECT)
+    PHI = models.ManyToManyField(Emoji, related_name="PHI_catagories")
+    PLI = models.ManyToManyField(Emoji, related_name="PLI_catagories")
+    NHI = models.ManyToManyField(Emoji, related_name="NHI_catagories")
+    NLI = models.ManyToManyField(Emoji, related_name="NLI_catagories")
     def __str__(self):
         return self.title
 
@@ -29,3 +29,4 @@ class React(models.Model):
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name="reactions")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reactions")
     date = models.DateTimeField(auto_now_add=True)
+    timestamp = models.TimeField(blank=False,null=False)
