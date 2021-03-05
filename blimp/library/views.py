@@ -1,10 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django import template
 from library.models import *
+from library.serializers import *
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django.db.models import Count, Q, F, Value, IntegerField, Case, When, OuterRef, Subquery
-
 
 import re
 
@@ -51,3 +53,19 @@ def video_detail(request):
 	reactions = vidObj.reactions.all().order_by('-date')
 	return render(request, 'video_detail.html', {'video':vidObj,
 												 'reactions':reactions})
+
+
+@api_view(['GET'])
+def video_list(request):
+    if request.method == 'GET':
+        videos = Video.objects.all()
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def video_detail_api(request, pk):
+    video = get_object_or_404(Video, id=pk)
+
+    if request.method == 'GET':
+        serializer = VideoSerializer(video)
+        return Response(serializer.data)

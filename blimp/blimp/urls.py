@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -28,6 +28,8 @@ urlpatterns = [
     path('accounts/signup/', core_views.SignUp.as_view(), name='signup'),
     path('', library_views.home, name='home'),
     path('watch', library_views.video_detail, name='watch'),
+    path('api/v1/videos/', library_views.video_list, name='video_list'),
+    re_path(r'api/v1/videos/(?P<pk>[0-9]+)', library_views.video_detail_api, name="video_detail"),
 ]
 
 if settings.DEBUG:
