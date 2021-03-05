@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="title">Blimb</div>
+    <div class="title">Blimp</div>
     <input type="text" name="username" id="username" placeholder="Username" class="mb-4">
     <input type="password" name="password" id="password" placeholder="Password">
     <NuxtLink class="btn btn-link mt-4" to="/signup">I need an account</NuxtLink>

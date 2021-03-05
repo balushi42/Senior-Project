@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="title">Blimb</div>
+    <div class="title">Blimp</div>
     <input type="text" name="email" id="email" placeholder="Email" class="mb-4">
     <input type="text" name="username" id="username" placeholder="Username" class="mb-4">
     <input type="password" name="password" id="password" placeholder="Password">
