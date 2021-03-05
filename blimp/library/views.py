@@ -13,17 +13,7 @@ from django.db.models import Count, Q, F, Value, IntegerField, Case, When, Outer
 import re
 
 def home(request):
-    if request.method == 'POST':
-        title = request.POST.get("title")
-        category = request.POST.get("category")
-        categoryobj = Category.objects.get(title=category)
-        if file.name.endswith('.mp4'):
-            Video(file=file, title=title, category=categoryobj).save()
-        elif file._size > 10485760:
-            messages.error(request,'File size too DARN big *_*')
-        else:
-            messages.error(request,'File is not of video type')
-    elif request.method == 'GET' and request.GET.get('query'):
+    if request.method == 'GET' and request.GET.get('query'):
     	#rank based on search terms
     	videos = Video.objects.annotate(rank=Value(0, IntegerField())) # initilize ranking with raking 0 >>> This is a start. The final system will include catagorizing step prior to posting.(details will be included in specification paper)
 
@@ -31,9 +21,6 @@ def home(request):
     		videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
 
     	videos = videos.order_by('-rank')
-
-    	for v in videos:
-    		print(v.rank)
 
     	resultsHTML = template.loader.render_to_string('include/video_list.html', {
 					'videos':videos,})
@@ -48,7 +35,7 @@ def video_detail(request):
 	vidID = request.GET.get('vidId')
 	vidObj = get_object_or_404(Video, id=vidID)
 
-	if request.method == "POST" and request.POST.get('reaction') and request.user.is_authenticated:
+	if request.method == "POST" and request.POST.get('emoji') and request.user.is_authenticated:
 		print(request.POST.get('emoji'))
 		emoji=Emoji.objects.get(id=request.POST.get('emoji'))
 		React(text=request.POST.get('reaction'), timestamp=request.POST.get('timestamp'), emoji=emoji, video=vidObj, user=request.user).save()
@@ -61,9 +48,17 @@ def video_detail(request):
 @api_view(['GET', 'POST'])
 def video_list(request):
     if request.method == 'GET':
-        videos = Video.objects.all()
+        if request.GET.get('query'):
+            videos = Video.objects.annotate(rank=Value(0, IntegerField())) # initilize ranking with raking 0 >>> This is a start. The final system will include catagorizing step prior to posting.(details will be included in specification paper)
+            for term in re.split('\W+', request.GET.get('query')):
+                videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
+            videos = videos.order_by('-rank')
+        else:
+            videos = Video.objects.all()
+
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
+
     elif request.method == 'POST':
         file = request.FILES["file"]
         if not file.name.endswith('.mp4'):
