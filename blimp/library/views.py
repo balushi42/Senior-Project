@@ -2,8 +2,10 @@ from django.shortcuts import render, get_object_or_404
 from django import template
 from library.models import *
 from library.serializers import *
+from library.exceptions import *
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count, Q, F, Value, IntegerField, Case, When, OuterRef, Subquery
@@ -12,7 +14,6 @@ import re
 
 def home(request):
     if request.method == 'POST':
-        file = request.FILES["file"]
         title = request.POST.get("title")
         category = request.POST.get("category")
         categoryobj = Category.objects.get(title=category)
@@ -57,12 +58,25 @@ def video_detail(request):
 												 'reactions':reactions})
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def video_list(request):
     if request.method == 'GET':
         videos = Video.objects.all()
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
+    elif request.method == 'POST':
+        file = request.FILES["file"]
+        if not file.name.endswith('.mp4'):
+            raise InvalidFileFormat()
+        elif file.size > 10485760:
+            raise LargeFileSize()
+
+        data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'file': file }
+        serializer = VideoSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def video_detail_api(request, pk):
