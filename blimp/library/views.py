@@ -48,7 +48,9 @@ def video_detail(request):
 	vidObj = get_object_or_404(Video, id=vidID)
 
 	if request.method == "POST" and request.POST.get('reaction') and request.user.is_authenticated:
-		React(text=request.POST.get('reaction'), video=vidObj, user=request.user).save()
+		print(request.POST.get('emoji'))
+		emoji=Emoji.objects.get(id=request.POST.get('emoji'))
+		React(text=request.POST.get('reaction'), timestamp=request.POST.get('timestamp'), emoji=emoji, video=vidObj, user=request.user).save()
 
 	reactions = vidObj.reactions.all().order_by('-date')
 	return render(request, 'video_detail.html', {'video':vidObj,

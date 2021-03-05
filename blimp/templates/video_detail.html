@@ -7,11 +7,12 @@
 {% block javascript %}
 <script>
 function toggleMenu() {
-  var menuBox = document.getElementById('menu-box');    
-  if(menuBox.style.display == "block") { // if is menuBox displayed, hide it
-    menuBox.style.display = "none";
-  }
-  else { // if is menuBox hidden, display it
+  var menuBox = document.getElementById('menu-box');
+  var selection = document.getElementById('selection');
+  var emoji = document.getElementById('emoji');
+  if(menuBox.style.display != "block") { // if is menuBox hidden, display it
+    emoji.value = selection.value;
+    selection.setAttribute("disabled",true);
     menuBox.style.display = "block";
   }
 }
@@ -30,24 +31,51 @@ Your browser does not support the video tag.
 <br>
 
 {% if request.user.is_authenticated %}
-<p id="menu" onclick="toggleMenu()"> React</p>
+ <form method="POST">
+<select id="selection" onchange="toggleMenu()">
+<option>None</option>
+{% for emoji in video.category.PHI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+
+
+{% for emoji in video.category.PLI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+
+
+{% for emoji in video.category.NHI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+
+
+{% for emoji in video.category.NLI.all %}
+<option value='{{emoji.id}}'> {{emoji.text}} </option>
+{% endfor %}
+</select>
+
+
 <ul id="menu-box" style="display: none">
-  <form method="POST">
+ 
 React:
 {% csrf_token %}
 <input type="text" name="reaction">
+<input type="hidden" name="emoji" id="emoji" >
+<input type="hidden" name="timestamp" value="00:00">
 <input type="submit" name="react!">
+
+</ul>
 </form>
 <br>
 {% endif %}
 
-</ul>
+
 
 Reactions:
 <br>
 
 {% for reaction in reactions %}
-{{ reaction.raw }} {{ reaction.date }}<br>
+{{ reaction.emoji }} {{ reaction.text }} {{ reaction.date }}<br>
 {% endfor %}
 
 {% if reactions.count == 0 %}
