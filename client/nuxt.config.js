@@ -33,7 +33,16 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    ['@nuxtjs/fontawesome', {
+      component: 'Fa',
+      icons: {
+        solid: [
+          'faBars',
+          'faTimes'
+        ]
+      }
+    }]
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

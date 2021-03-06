@@ -2,15 +2,26 @@
   <div>
     <nav>
       <div>
-        <p>
-          menu
-        </p>
+        <button class="btn-link" @click="open">
+          <Fa icon="bars" />
+        </button>
 
         <NuxtLink to="/" tag="a" class="nav-header">
           Blimp
         </NuxtLink>
 
-        <ul>
+        <ul v-bind:class="{'show': showBar, 'closing': closingBar}">
+          <div class="flex justify-between md:hidden">
+            <div class="w-1/4" />
+            <NuxtLink to="/" tag="a" class="nav-header w-1/2 h-full text-center">
+              Blimp
+            </NuxtLink>
+            <div class="w-1/4 flex justify-end p-2 self-stretch">
+              <button class="mr-4 btn-link" @click="close">
+                <Fa icon="times" class="h-auto" />
+              </button>
+            </div>
+          </div>
           <li>
             <NuxtLink to="/" tag="a">
               Home
@@ -31,5 +42,39 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  data () {
+    return {
+      showBar: false,
+      closingBar: false,
+      transitioning: false
+    }
+  },
+  methods: {
+    open () {
+      if (this.transitioning) return;
+      this.transitioning = true;
+
+      this.showBar = true;
+      this.closingBar = false;
+
+      setTimeout(() => {
+        this.transitioning = false;
+      }, 100);
+    },
+    close () {
+      if (this.transitioning) return;
+      this.transitioning = true;
+
+      this.closingBar = true;
+
+      setTimeout(() => {
+        this.showBar = false;
+        this.closingBar = false;
+
+        this.transitioning = false;
+      }, 100);
+    }
+  }
+})
 </script>

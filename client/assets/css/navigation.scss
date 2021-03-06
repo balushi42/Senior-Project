@@ -1,14 +1,6 @@
 nav {
   @apply flex justify-between;
 
-  a {
-    @apply p-2;
-  }
-
-  a:hover:not(.nav-header) {
-    @apply bg-green-500 text-white rounded-sm;
-  }
-
   .nav-header {
     @apply text-2xl text-green-700 font-bold;
   }
@@ -16,13 +8,13 @@ nav {
   div {
     @apply flex flex-row self-end;
 
-    p {
-      @apply md:hidden inline pr-2;
+    button {
+      @apply md:hidden inline ml-2 pl-2 p-2 self-center hover:bg-transparent;
     }
   }
 
   ul {
-    @apply hidden duration-300 md:duration-0 md:flex md:flex-row;
+    @apply hidden md:flex md:flex-row;
 
     li {
       @apply flex self-end;
@@ -31,5 +23,61 @@ nav {
         @apply font-bold;
       }
     }
+  }
+
+  a {
+    @apply p-2;
+  }
+
+  a:focus {
+    @apply outline-none ring ring-green-400 rounded-md;
+  }
+
+  .show {
+    animation: slideIn 0.1s;
+    transform: translate3d(100vw, 0, 0);
+
+    @media (min-width: 768px) {
+      transform: translate3d(0, 0, 0);
+    }
+
+    @apply fixed md:relative bg-white md:bg-transparent h-screen md:h-auto w-screen md:w-auto block md:flex -left-full md:left-0 md:animate-none;
+
+    li {
+      @apply w-screen md:w-auto;
+
+      a {
+        @apply w-screen md:w-auto text-center md:text-left;
+      }
+    }
+  }
+
+  .closing {
+    animation: slideOut 0.1s;
+    transform: translate3d(0, 0, 0);
+  }
+
+  a:hover:not(.nav-header) {
+    @apply bg-green-500 text-white rounded-sm;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translate3d(100vw, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(100vw, 0, 0);
   }
 }
