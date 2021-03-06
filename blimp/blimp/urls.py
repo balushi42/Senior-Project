@@ -31,6 +31,7 @@ urlpatterns = [
     path('', library_views.home, name='home'),
     path('watch', library_views.video_detail, name='watch'),
 
+    path('api/v1/register/', core_views.CreateUserView.as_view(), name='signup_api'),
     path('api/v1/token/', jwt_views.TokenObtainPairView.as_view(), name='token_auth'),
     path('api/v1/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/videos/', library_views.video_list, name='video_list'),
