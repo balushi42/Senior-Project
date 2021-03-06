@@ -1,0 +1,35 @@
+nav {
+  @apply flex justify-between;
+
+  a {
+    @apply p-2;
+  }
+
+  a:hover:not(.nav-header) {
+    @apply bg-green-500 text-white rounded-sm;
+  }
+
+  .nav-header {
+    @apply text-2xl text-green-700 font-bold;
+  }
+
+  div {
+    @apply flex flex-row self-end;
+
+    p {
+      @apply md:hidden inline pr-2;
+    }
+  }
+
+  ul {
+    @apply hidden duration-300 md:duration-0 md:flex md:flex-row;
+
+    li {
+      @apply flex self-end;
+
+      .nuxt-link-exact-active {
+        @apply font-bold;
+      }
+    }
+  }
+}

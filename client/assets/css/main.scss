@@ -37,3 +37,6 @@ input {
 .btn-primary:focus {
   @apply outline-none ring ring-green-400;
 }
+
+// Navigation styling
+@import './navigation.scss';
