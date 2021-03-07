@@ -2,12 +2,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django import template
 from library.models import *
 from library.serializers import *
-from library.exceptions import *
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Count, Q, F, Value, IntegerField, Case, When, OuterRef, Subquery
 
 import re
@@ -43,8 +43,7 @@ def video_detail(request):
 	return render(request, 'video_detail.html', {'video':vidObj,
 												 'reactions':reactions})
 
-
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def video_list(request):
     if request.method == 'GET':
         if request.GET.get('query'):
@@ -58,14 +57,10 @@ def video_list(request):
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        file = request.FILES["file"]
-        if not file.name.endswith('.mp4'):
-            raise InvalidFileFormat()
-        elif file.size > 10485760:
-            raise LargeFileSize()
-
-        data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'file': file }
+@api_view(['POST'])
+def video_upload_api(request):
+    if request.method == 'POST':
+        data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'file': request.FILES["file"] }
         serializer = VideoSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -80,3 +75,19 @@ def video_detail_api(request, pk):
     if request.method == 'GET':
         serializer = VideoSerializer(video)
         return Response(serializer.data)
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def video_reactions_api(request, pk):
+    video = get_object_or_404(Video, id=pk)
+
+    if request.method == 'GET':
+        serializer = VideoReactionSerializer(video)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = {'emoji': request.data.get('emoji'), 'text': request.data.get('text'),'timestamp': request.data.get('timestamp'), 'user':request.user.pk, 'video':video.pk}
+        serializer = ReactionSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -36,6 +36,8 @@ urlpatterns = [
     path('api/v1/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/videos/', library_views.video_list, name='video_list'),
     re_path(r'api/v1/videos/(?P<pk>[0-9]+)', library_views.video_detail_api, name="video_detail"),
+    re_path(r'api/v1/reactions/(?P<pk>[0-9]+)', library_views.video_reactions_api, name="video_reactions"),
+    path('api/v1/videos/upload', library_views.video_upload_api, name='video_upload'),
 ]
 
 if settings.DEBUG:
