@@ -1,12 +1,12 @@
 # Senior-Project
 
-# python venv setup:
+## python venv setup:
 
 python3 -m venv venv
 
 source venv/bin/activate
 
-# Django setup:
+## Django setup:
 
 python3 -m pip install -r requirements.txt
 
@@ -15,43 +15,43 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 
 
-# Run backend server
+## Run backend server
 python3 manage.py runserver
 
-# api endpoints
+## api endpoints
 
 - /api/v1/register/
-{POST}
-email
-username
-password
+  * {POST}
+    * email
+    * username
+    * password
 
 - /api/v1/token/
-{POST}
-username
-password
+  * {POST}
+    * username
+    * password
 
 - /api/v1/token/refresh/
-{POST}
-refresh='JWT refresh token'
+  * {POST}
+    * refresh='JWT refresh token'
 
 - api/v1/videos/
-{GET}
-optional:
-?query='term'
+  * {GET}
+    * optional:
+      * ?query='term'
 
 - /api/v1/videos/<video-id>
-{GET}
+  * {GET}
 
 - /api/v1/reactions/<video-id>
-{GET}
-{POST}
-emoji='emoji id'
-text='text comment'
-timestamp='video time stamp'
+  * {GET}
+  * {POST}
+    * emoji='emoji id'
+    * text='text comment'
+    * timestamp='video time stamp'
 
 - /api/v1/videos/upload
-{POST}
-title='video title'
-category='category id'
-file='uploaded multipart file'
+  * {POST}
+    * title='video title'
+    * category='category id'
+    * file='uploaded multipart file'
