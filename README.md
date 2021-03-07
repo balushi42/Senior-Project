@@ -37,6 +37,22 @@ python3 manage.py runserver
   * {POST}
     * refresh='JWT refresh token'
 
+- /api/v1/me/
+  * {GET}
+
+- /api/v1/people/
+  * {GET}
+
+- /api/v1/friends/
+  * {GET}
+  * {POST}
+    * friend='user id to add'
+
+- /api/v1/friends/pending
+  * {GET}
+  * {POST}
+    * friend='user id to accept'
+
 - api/v1/videos/
   * {GET}
     * optional:

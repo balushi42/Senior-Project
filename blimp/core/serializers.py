@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from core.models import Profile
+from core.models import Profile, Friendship
+from django.db.models import Q
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,3 +25,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('__all__')
         read_only_fields = ['id', 'user']
+
+class FriendSerializer(serializers.ModelSerializer):
+    def validate(self, data):
+        #test friend make sure no duplicate
+        friend = data['friend']
+        creator = data['creator']
+        if Friendship.objects.filter(Q(creator=creator, friend=friend)|Q(friend=creator, creator=friend)).count() != 0:
+            raise serializers.ValidationError({"friend": "Friend selection error, Already friends/pending"})
+        return data
+    class Meta:
+        model = Friendship
+        fields = ['creator', 'friend', 'status']
