@@ -20,14 +20,14 @@ def home(request):
     	for term in re.split('\W+', request.GET.get('query')):
     		videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
 
-    	videos = videos.order_by('-rank')
+    	videos = videos.order_by('viral', 'group', '-rank')
 
     	resultsHTML = template.loader.render_to_string('include/video_list.html', {
 					'videos':videos,})
 
     	return JsonResponse({'search-result':resultsHTML})
 
-    videos = Video.objects.all()
+    videos = Video.objects.all().order_by('-viral', '-group')
 
     return render(request, 'home.html', {'videos':videos})
 
@@ -50,9 +50,9 @@ def video_list(request):
             videos = Video.objects.annotate(rank=Value(0, IntegerField())) # initilize ranking with raking 0 >>> This is a start. The final system will include catagorizing step prior to posting.(details will be included in specification paper)
             for term in re.split('\W+', request.GET.get('query')):
                 videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
-            videos = videos.order_by('-rank')
+            videos = videos.order_by('-viral', '-group', '-rank')
         else:
-            videos = Video.objects.all()
+            videos = Video.objects.all().order_by('-viral', '-group')
 
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
@@ -91,3 +91,20 @@ def video_reactions_api(request, pk):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def category_list(request):
+    if request.method == 'GET':
+        categories = Category.objects.all()
+
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def category_detail(request, pk):
+    category = get_object_or_404(Category, id=pk)
+
+    if request.method == 'GET':
+        serializer = CategoryEmojiSerializer(category)
+        return Response(serializer.data)

@@ -55,3 +55,9 @@ python3 manage.py runserver
     * title='video title'
     * category='category id'
     * file='uploaded multipart file'
+
+-/api/v1/categories
+  * {GET}
+
+-/api/v1/categories/<category-id>
+  * {GET}

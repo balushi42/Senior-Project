@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from library.exceptions import *
-from .models import Video, React
+from .models import Video, React, Category, Emoji
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -37,3 +37,29 @@ class VideoReactionSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Video
 		fields = ('reactions',)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Category
+		fields = ['id', 'title']
+		read_only_fields = ['id', 'title']
+
+class EmojiSerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Emoji
+		fields = ('__all__')
+		read_only_fields = ['__all__']
+
+class CategoryEmojiSerializer(serializers.ModelSerializer):
+
+	PHI = EmojiSerializer(many=True)
+	PLI = EmojiSerializer(many=True)
+	NHI = EmojiSerializer(many=True)
+	NLI = EmojiSerializer(many=True)
+
+	class Meta:
+		model = Category
+		fields = ('PHI', 'PLI', 'NHI', 'NLI', )
