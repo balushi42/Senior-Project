@@ -42,10 +42,10 @@ python3 manage.py runserver
     * optional:
       * ?query='term'
 
-- /api/v1/videos/<video-id>
+- /api/v1/videos/\<video-id\>
   * {GET}
 
-- /api/v1/reactions/<video-id>
+- /api/v1/reactions/\<video-id\>
   * {GET}
   * {POST}
     * emoji='emoji id'
@@ -61,5 +61,5 @@ python3 manage.py runserver
 -/api/v1/categories
   * {GET}
 
--/api/v1/categories/<category-id>
+-/api/v1/categories/\<category-id\>
   * {GET}
