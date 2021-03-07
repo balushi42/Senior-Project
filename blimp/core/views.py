@@ -28,6 +28,12 @@ def profile_api(request):
         serializer = ProfileSerializer(request.user.profile)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def people_api(request):
+    if request.method == 'GET':
+        serializer = ProfileSerializer(Profile.objects.all(), many=True)
+        return Response(serializer.data)
+
 @api_view(['GET', 'POST'])
 @permission_classes([permissions.IsAuthenticated])
 def friends_api(request):

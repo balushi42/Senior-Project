@@ -37,6 +37,12 @@ python3 manage.py runserver
   * {POST}
     * refresh='JWT refresh token'
 
+- /api/v1/me/
+  * {GET}
+
+- /api/v1/people/
+  * {GET}
+
 - /api/v1/friends/
   * {GET}
   * {POST}
