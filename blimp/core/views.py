@@ -4,8 +4,10 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.generics import CreateAPIView
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
 
 from core.serializers import *
 
@@ -19,6 +21,13 @@ class SignUp(generic.CreateView):
 def profile(request):
 	return render(request, 'registration/profile.html', {})
 
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def profile_api(request):
+    if request.method == 'GET':
+        serializer = ProfileSerializer(request.user.profile)
+        return Response(serializer.data)
+    
 
 class CreateUserView(CreateAPIView):
 

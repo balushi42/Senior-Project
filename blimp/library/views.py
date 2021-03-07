@@ -20,7 +20,7 @@ def home(request):
     	for term in re.split('\W+', request.GET.get('query')):
     		videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
 
-    	videos = videos.order_by('viral', 'group', '-rank')
+    	videos = videos.order_by('-rank', '-viral', '-group')
 
     	resultsHTML = template.loader.render_to_string('include/video_list.html', {
 					'videos':videos,})
@@ -50,7 +50,7 @@ def video_list(request):
             videos = Video.objects.annotate(rank=Value(0, IntegerField())) # initilize ranking with raking 0 >>> This is a start. The final system will include catagorizing step prior to posting.(details will be included in specification paper)
             for term in re.split('\W+', request.GET.get('query')):
                 videos = videos.annotate(rank=Case(When(title__icontains=term, then=F('rank')+Value(1, IntegerField())), default=F('rank'), output_field=IntegerField())) #update rank to add 1
-            videos = videos.order_by('-viral', '-group', '-rank')
+            videos = videos.order_by('-rank', '-viral', '-group')
         else:
             videos = Video.objects.all().order_by('-viral', '-group')
 
