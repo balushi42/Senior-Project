@@ -14,8 +14,10 @@ python3 manage.py makemigrations
 
 python3 manage.py migrate
 
+python3 manage.py loaddata DB.json
 
 ## Run backend server
+
 python3 manage.py runserver
 
 ## api endpoints
