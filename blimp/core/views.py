@@ -27,6 +27,36 @@ def profile_api(request):
     if request.method == 'GET':
         serializer = ProfileSerializer(request.user.profile)
         return Response(serializer.data)
+
+@api_view(['GET', 'POST'])
+@permission_classes([permissions.IsAuthenticated])
+def friends_api(request):
+    if request.method == 'GET':
+        serializer = FriendSerializer(request.user.profile.friends(), many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        friend = User.objects.get(pk=request.data.get('friend'))
+        data = {'creator':request.user.pk, 'friend':friend.pk}
+        serializer = FriendSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+@permission_classes([permissions.IsAuthenticated])
+def friends_pending_api(request):
+    if request.method == 'GET':
+        serializer = FriendSerializer(request.user.profile.friends_pending(), many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        friend_request = request.user.profile.friends_pending().get(friend=request.user.pk, creator=request.data.get('friend'))
+        data = {'friend':request.user.pk, 'creator':friend_request.creator.pk, 'status':Friendship.ACCEPTED}
+        serializer = FriendSerializer(friend_request, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 class CreateUserView(CreateAPIView):

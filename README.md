@@ -37,15 +37,25 @@ python3 manage.py runserver
   * {POST}
     * refresh='JWT refresh token'
 
+- /api/v1/friends/
+  * {GET}
+  * {POST}
+    * friend='user id to add'
+
+- /api/v1/friends/pending
+  * {GET}
+  * {POST}
+    * friend='user id to accept'
+
 - api/v1/videos/
   * {GET}
     * optional:
       * ?query='term'
 
-- /api/v1/videos/<video-id>
+- /api/v1/videos/\<video-id\>
   * {GET}
 
-- /api/v1/reactions/<video-id>
+- /api/v1/reactions/\<video-id\>
   * {GET}
   * {POST}
     * emoji='emoji id'
@@ -61,5 +71,5 @@ python3 manage.py runserver
 -/api/v1/categories
   * {GET}
 
--/api/v1/categories/<category-id>
+-/api/v1/categories/\<category-id\>
   * {GET}
