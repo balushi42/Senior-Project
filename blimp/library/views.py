@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django import template
 from library.models import *
 from library.serializers import *
@@ -7,7 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from django.db.models import Count, Q, F, Value, IntegerField, Case, When, OuterRef, Subquery
 
 import re
@@ -58,14 +58,14 @@ def video_list(request):
         return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def video_upload_api(request):
     if request.method == 'POST':
-        data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'file': request.FILES["file"] }
+        data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'user': request.user.pk, 'file': request.FILES["file"] }
         serializer = VideoSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            #return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return redirect('/')
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])

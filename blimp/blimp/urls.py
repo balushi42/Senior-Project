@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/v1/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/me/', core_views.profile_api, name='profile_api'),
     path('api/v1/people/', core_views.people_api, name='people_api'),
+    re_path(r'api/v1/people/(?P<pk>[0-9]+)', core_views.people_detail_api, name="people_detail_api"),
     path('api/v1/friends/', core_views.friends_api, name='friends_api'),
     path('api/v1/friends/pending', core_views.friends_pending_api, name='friends_pending_api'),
 

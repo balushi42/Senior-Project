@@ -43,6 +43,9 @@ python3 manage.py runserver
 - /api/v1/people/
   * {GET}
 
+- /api/v1/people/\<user-id\>
+  * {GET}
+
 - /api/v1/friends/
   * {GET}
   * {POST}
