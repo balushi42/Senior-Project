@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.decorators import login_required
@@ -32,6 +32,13 @@ def profile_api(request):
 def people_api(request):
     if request.method == 'GET':
         serializer = ProfileSerializer(Profile.objects.all(), many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def people_detail_api(request, pk):
+    profile = get_object_or_404(Profile, id=pk)
+    if request.method == 'GET':
+        serializer = ProfileSerializer(profile)
         return Response(serializer.data)
 
 @api_view(['GET', 'POST'])
