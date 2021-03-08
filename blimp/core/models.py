@@ -22,6 +22,8 @@ class Profile(models.Model):
 
 	def __str__(self):
 		return self.user.username + " Profile"
+	def videos(self):
+		return self.user.videos.all()
 	def friends(self):
 		return Friendship.objects.filter(Q(creator=self.user, status=Friendship.ACCEPTED)|Q(friend=self.user, status=Friendship.ACCEPTED)).all()
 	def friends_pending(self):

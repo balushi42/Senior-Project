@@ -45,6 +45,8 @@ urlpatterns = [
     re_path(r'api/v1/reactions/(?P<pk>[0-9]+)/', library_views.video_reactions_api, name="video_reactions"),
     path('api/v1/videos/upload/', library_views.video_upload_api, name='video_upload'),
 
+    path('api/v1/timeline/', library_views.timeline_api, name='timeline_api'),
+
     path('api/v1/categories/', library_views.category_list, name='category_list'),
     re_path(r'api/v1/categories/(?P<pk>[0-9]+)/', library_views.category_detail, name="category_detail"),
 

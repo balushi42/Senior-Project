@@ -43,7 +43,7 @@ def video_detail(request):
 	reactions = vidObj.reactions.all().order_by('-date')
 	return render(request, 'video_detail.html', {'video':vidObj,
 												 'reactions':reactions})
-
+#api method to serialize videos and perform queries
 @api_view(['GET'])
 def video_list(request):
     if request.method == 'GET':
@@ -58,6 +58,18 @@ def video_list(request):
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
 
+#api method to serialize videos of current user and friends in order of newest first and by their viral and group rank
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def timeline_api(request):
+    if request.method == 'GET':
+        videos = Video.objects.filter(Q(user=request.user) | Q(user__friendship_creator_set__friend=request.user) | Q(user__friend_set__creator=request.user) | Q(reactions__user=request.user) | Q(reactions__user__friendship_creator_set__friend=request.user) | Q(reactions__user__friend_set__creator=request.user)).distinct()
+        videos = videos.order_by('-date_uploaded', '-viral', '-group')
+
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
+
+#api method to handle uploading file to timeline
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def video_upload_api(request):
@@ -72,6 +84,7 @@ def video_upload_api(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#api method to retrive single serialized video object
 @api_view(['GET'])
 def video_detail_api(request, pk):
     video = get_object_or_404(Video, id=pk)
@@ -80,6 +93,7 @@ def video_detail_api(request, pk):
         serializer = VideoSerializer(video)
         return Response(serializer.data)
 
+#api method to retrieve video reactions(anon) and post a new reaction(user)
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def video_reactions_api(request, pk):
@@ -96,7 +110,7 @@ def video_reactions_api(request, pk):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+#api method to retrive available categories
 @api_view(['GET'])
 def category_list(request):
     if request.method == 'GET':
@@ -105,6 +119,7 @@ def category_list(request):
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
+#api method to retrive specific category
 @api_view(['GET'])
 def category_detail(request, pk):
     category = get_object_or_404(Category, id=pk)
