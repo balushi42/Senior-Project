@@ -31,7 +31,8 @@ class FriendSerializer(serializers.ModelSerializer):
         #test friend make sure no duplicate
         friend = data['friend']
         creator = data['creator']
-        if request.user.pk == creator and Friendship.objects.filter(Q(creator=creator, friend=friend)|Q(friend=creator, creator=friend)).count() != 0:
+        status = data['status']
+        if status == Friendship.PENDING and Friendship.objects.filter(Q(creator=creator, friend=friend)|Q(friend=creator, creator=friend)).count() != 0:
             raise serializers.ValidationError({"friend": "Friend selection error, Already friends/pending"})
         elif Friendship.objects.filter(creator=creator, friend=friend).count() != 1:
             raise serializers.ValidationError({"friend": "Friend selection error, selected request not found"})
