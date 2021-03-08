@@ -34,8 +34,10 @@ class FriendSerializer(serializers.ModelSerializer):
         status = data['status']
         if status == Friendship.PENDING and Friendship.objects.filter(Q(creator=creator, friend=friend)|Q(friend=creator, creator=friend)).count() != 0:
             raise serializers.ValidationError({"friend": "Friend selection error, Already friends/pending"})
-        elif Friendship.objects.filter(creator=creator, friend=friend).count() != 1:
+        elif status == Friendship.ACCEPTED and Friendship.objects.filter(creator=creator, friend=friend).count() != 1:
             raise serializers.ValidationError({"friend": "Friend selection error, selected request not found"})
+        elif friend == creator:
+            raise serializers.ValidationError({"friend": "Friend selection error, cannot friend self"})
 
         return data
     class Meta:
