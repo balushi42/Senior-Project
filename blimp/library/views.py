@@ -4,6 +4,7 @@ from library.models import *
 from library.serializers import *
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
+from django.utils.datastructures import MultiValueDictKeyError
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -61,7 +62,10 @@ def video_list(request):
 @permission_classes([IsAuthenticated])
 def video_upload_api(request):
     if request.method == 'POST':
-        data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'user': request.user.pk, 'file': request.FILES["file"] }
+        try:
+            data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'user': request.user.pk, 'file': request.FILES["file"] }
+        except MultiValueDictKeyError:
+            data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'user': request.user.pk, 'file': None }
         serializer = VideoSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
