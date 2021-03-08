@@ -49,7 +49,7 @@ def friends_api(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         friend = User.objects.get(pk=request.data.get('friend'))
-        data = {'creator':request.user.pk, 'friend':friend.pk}
+        data = {'creator':request.user.pk, 'friend':friend.pk, 'status': Friendship.PENDING}
         serializer = FriendSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
