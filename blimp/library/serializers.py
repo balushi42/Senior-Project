@@ -14,7 +14,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Video
-		fields = ('id', 'title', 'category', 'date_uploaded', 'file')
+		fields = ('id', 'title', 'category', 'user', 'date_uploaded', 'file')
 
 
 class ReactionSerializer(serializers.ModelSerializer):
