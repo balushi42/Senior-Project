@@ -61,6 +61,9 @@ python3 manage.py runserver
     * optional:
       * ?query='term'
 
+- /api/v1/videos/viral/
+  * {GET}
+
 - /api/v1/videos/\<video-id\>
   * {GET}
 

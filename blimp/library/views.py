@@ -37,6 +37,15 @@ def timeline_api(request):
         serializer = VideoSerializer(videos, many=True)
         return Response(serializer.data)
 
+#api method to serialize videos of current user and friends in order of newest first and by their viral and group rank
+@api_view(['GET'])
+def viral_timeline_api(request):
+    if request.method == 'GET':
+        videos = Video.objects.all().order_by('-viral', '-date_uploaded', '-group')
+
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
+
 #api method to handle uploading file to timeline
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
