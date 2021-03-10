@@ -7,7 +7,7 @@ from django.db.models import Q
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['email', 'username', 'password']
+        fields = ['id', 'email', 'username', 'password']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -23,8 +23,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Profile
-        fields = ('__all__')
-        read_only_fields = ['id', 'user']
+        fields = ['user']
 
 class FriendSerializer(serializers.ModelSerializer):
     def validate(self, data):
