@@ -36,6 +36,7 @@ nav {
   .show {
     animation: slideIn 0.1s;
     transform: translate3d(100vw, 0, 0);
+    z-index: 2147483647;
 
     @media (min-width: 768px) {
       transform: translate3d(0, 0, 0);
