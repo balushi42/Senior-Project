@@ -13,16 +13,16 @@
           <div class="video-reaction-bar" :class="{'video-reaction-bar-hidden': !state.contrlShow}">
             <div class="video-reaction-options" :class="{'video-reaction-options-visible': reaction.showOptions}">
               <div class="video-reaction-col">
-                <div class="video-reaction-option" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🤬']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
                   🤬
                 </div>
-                <div class="video-reaction-option" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🙁']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
                   🙁
                 </div>
-                <div class="video-reaction-option" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🙂']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
                   🙂
                 </div>
-                <div class="video-reaction-option" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🤣']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
                   🤣
                 </div>
               </div>
@@ -188,7 +188,19 @@ export default Vue.extend({
       },
       reaction: {
         showOptions: false,
-        options: ['🙁', '🙂', '🤣']
+        options: ['😂', '🤣', '😍'],
+        sets: {
+          '🤣': ['😂', '🤣', '😍'],
+          '🙂': ['😐', '🙂', '😄'],
+          '🙁': ['😞', '🙁', '😑'],
+          '🤬': ['👿', '🤬', '😤'],
+        } as { [key: string]: string[] },
+        active: {
+          '🤣': false,
+          '🙂': false,
+          '🙁': false,
+          '🤬': false,
+        } as { [key: string]: boolean }
       },
       reactionStyle: {
         right: '0px',
@@ -267,6 +279,11 @@ export default Vue.extend({
         this.tmp.contrlHideTimer = null;
         this.reactionStyle.opacity = '0';
         this.reactionStyle['pointer-events'] = 'none';
+
+        const keys = Object.keys(this.reaction.active);
+        for (const key of keys) {
+          this.reaction.active[key] = false;
+        }
       }, 2000);
     },
     toggleContrlShow() {
@@ -401,6 +418,11 @@ export default Vue.extend({
       if (!this.reaction.showOptions) {
         this.reactionStyle.opacity = '0';
         this.reactionStyle['pointer-events'] = 'none';
+
+        const keys = Object.keys(this.reaction.active);
+        for (const key of keys) {
+          this.reaction.active[key] = false;
+        }
       }
     },
     reactionOptionHover(e: MouseEvent) {
@@ -409,13 +431,22 @@ export default Vue.extend({
 
       if (!target.parentElement) return;
 
+      if (target.textContent) {
+        const emoji = target.textContent.trim();
+
+        this.reaction.options = this.reaction.sets[emoji];
+        const keys = Object.keys(this.reaction.active);
+        for (const key of keys) {
+          this.reaction.active[key] = (key === emoji);
+        }
+      }
+
       const rect = target.getBoundingClientRect();
       const parentRect = target.parentElement.getBoundingClientRect();
-      const specificRect = (this.$refs.specific as HTMLElement).children[0].getBoundingClientRect();
 
       this.reactionStyle.right = `${rect.right}px`;
-      this.reactionStyle.left = `${rect.left - specificRect.width}px`;
-      this.reactionStyle.top = `calc(${parentRect.top - specificRect.width}px - 0.5em)`;
+      this.reactionStyle.left = `${rect.left - rect.width}px`;
+      this.reactionStyle.top = `calc(${parentRect.top - rect.width}px - 0.5em)`;
       this.reactionStyle.bottom = `${parentRect.bottom}px`;
 
       this.reactionStyle.opacity = '100';
@@ -436,6 +467,11 @@ export default Vue.extend({
       this.tmp.reactionHideTimer = setTimeout(() => {
         this.reactionStyle.opacity = '0';
         this.reactionStyle['pointer-events'] = 'none';
+
+        const keys = Object.keys(this.reaction.active);
+        for (const key of keys) {
+          this.reaction.active[key] = false;
+        }
 
         this.reaction.showOptions = false;
       }, 2000);
@@ -484,6 +520,10 @@ export default Vue.extend({
   filter: grayscale(100%);
 
   @apply text-3xl cursor-pointer;
+}
+
+.video-reaction-option-active {
+  filter: grayscale(0%);
 }
 
 .video-reaction-option:hover {
