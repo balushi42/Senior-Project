@@ -33,7 +33,7 @@
 		<span class="close" onclick="closeupload()">&times;</span>
 		<div class="modal-content" id="modalContent">
 			<h2>Upload a file here</h2>
-			<form method="post" enctype="multipart/form-data" class="form-horizontal" action="{% url 'video_list' %}">
+			<form method="post" enctype="multipart/form-data" class="form-horizontal" action="{% url 'video_upload' %}">
 				{% csrf_token %}
 				<div class="form-group">
 				  <input type="text" name="title" required="True">

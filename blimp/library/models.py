@@ -22,6 +22,7 @@ class Video(models.Model):
     category = models.ForeignKey(Category,related_name="videos", on_delete=models.CASCADE)
     file = models.FileField(null=False, blank=False)
     title = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
     date_uploaded = models.DateTimeField(auto_now_add=True)
     group = models.IntegerField(default=0)
     viral = models.IntegerField(default=0)
