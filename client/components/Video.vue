@@ -1,8 +1,8 @@
 <template>
     <div id="app">
       <div class="container">
-        <div class="video-container" @mouseenter="mouseEnterVideo" @mouseleave="mouseLeaveVideo">
-          <video class="video" :poster="options.poster" @click="play" ref="video">
+        <div class="video-container" @mouseenter="mouseEnterVideo" @mouseleave="mouseLeaveVideo" ref="videoContainer">
+          <video class="video" :poster="options.poster" @click="screenClick" ref="video">
             <source v-for="source in sources" :src="source.src" :type="source.type" :key="source.src" />
           </video>
           <div class="video-reaction-specific" :style="reactionStyle" ref="specific">
@@ -51,9 +51,9 @@
                   </g>
                 </svg>
               </button>
-              <div class="video-progress-bar" @click="slideClick" @mousedown="videoMove">
-                <div class="video-progress-rail">
-                  <div class="video-progress-rail-inner" :style="{ 'transform': `translate3d(${-video.pos.current}px, 0, 0)`}"></div>
+              <div class="video-progress-bar" ref="progressBar">
+                <div class="video-progress-rail" @click="slideClick">
+                  <div class="video-progress-rail-inner" :style="{ 'width': `${video.pos.current}%`}"></div>
                 </div>
               </div>
               <div class="video-control-time">
@@ -209,7 +209,8 @@ export default Vue.extend({
         bottom: '0px',
         opacity: '0',
         'pointer-events': 'none'
-      }
+      },
+      lastClick: 0
     };
   },
   mounted() {
@@ -252,13 +253,6 @@ export default Vue.extend({
       this.volume.pos.width = $volBox.getBoundingClientRect().width - this.volume.pos.innerWidth;
     },
     initVideo() {
-      const $videoSlider = this.$el.getElementsByClassName('video-progress-bar')[0];
-
-      this.video.pos.start = $videoSlider.getBoundingClientRect().left;
-      this.video.pos.width = $videoSlider.getBoundingClientRect().width - this.video.pos.innerWidth;
-
-      this.video.pos.current = this.video.pos.width;
-      this.getTime();
     },
     mouseEnterVideo() {
       if (this.tmp.contrlHideTimer) {
@@ -301,17 +295,24 @@ export default Vue.extend({
       this.video.len = this.$video.duration;
     },
     setVideoByTime(percent: number) {
-      if (!this.$video) return;
+      this.video.pos.current = percent * 100;
+      const video = this.$refs.video as HTMLVideoElement;
+      video.currentTime = video.duration * percent;
+    },
+    screenClick() {
+      const newTime = new Date().getTime();
+      if ((newTime - this.lastClick) < 200) {
+        this.fullScreen();
+      }
 
-      this.$video.currentTime = Math.floor(percent * this.video.len);
+      this.lastClick = newTime;
+      this.play();
     },
     play() {
       this.state.playing = !this.state.playing;
       if (this.$video) {
         if (this.state.playing) {
           this.$video.play();
-
-          this.mouseLeaveVideo();
 
           this.$video.addEventListener("timeupdate", this.timeline);
           this.$video.addEventListener("ended", () => {
@@ -324,9 +325,9 @@ export default Vue.extend({
     },
     timeline() {
       if (!this.$video) return;
+      const video = (this.$refs.video as HTMLVideoElement)
 
-      const percent = this.$video.currentTime / this.$video.duration;
-      this.video.pos.current = this.video.pos.width - (this.video.pos.width * percent);
+      this.video.pos.current = (video.currentTime / video.duration) * 100;
 
       this.video.displayTime = timeParse(
         this.$video.duration - this.$video.currentTime
@@ -359,11 +360,12 @@ export default Vue.extend({
       }
     },
     fullScreen() {
+      this.state.fullScreen = (window.innerWidth == screen.width && window.innerHeight == screen.height);
       if (!this.state.fullScreen) {
         if (!this.$video) return;
 
         this.state.fullScreen = true;
-        this.$video.requestFullscreen();
+        (this.$refs.videoContainer as HTMLElement).requestFullscreen();
       } else {
         this.state.fullScreen = false;
         document.exitFullscreen();
@@ -371,14 +373,13 @@ export default Vue.extend({
       setTimeout(this.initVideo, 200);
     },
     mouseMoveAction(e: MouseEvent) {
-      if (this.volume.moving) {
-        this.volSlideMove(e);
+      const rect = (this.$refs.video as HTMLVideoElement).getBoundingClientRect();
+      if (e.clientY > rect.top && e.clientY < rect.bottom) {
+        if (e.clientX > rect.left && e.clientX < rect.right) {
+          this.state.contrlShow = true;
+          this.mouseLeaveVideo();
+        }
       }
-      if (this.video.moving) {
-        this.videoSlideMove(e);
-      }
-
-      this.contrlHider(e);
     },
     contrlHider(e: MouseEvent) {
       const x = getMousePosition(e, "x");
@@ -403,11 +404,21 @@ export default Vue.extend({
       }
     },
     videoSlideMove(e: MouseEvent) {
-      const x = getMousePosition(e) - this.video.pos.start;
-      if (x > 0 && x < this.video.pos.width) {
-        this.video.pos.current = x;
-        this.setVideoByTime(x / this.video.pos.width);
+      // const x = getMousePosition(e) - this.video.pos.start;
+      let target = e.target as HTMLElement;
+      if (target.classList.contains('video-progress-rail-inner')) {
+        target = target.parentElement as HTMLElement;
       }
+
+      const rect = target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+
+      this.setVideoByTime(x / rect.width);
+
+      // if (x > 0 && x < this.video.pos.width) {
+      //   this.video.pos.current = x;
+      //   this.setVideoByTime(x / this.video.pos.width);
+      // }
     },
     mouseUpAction() {
       this.volume.moving = false;
@@ -575,7 +586,7 @@ export default Vue.extend({
   bottom: 0;
   height: 2rem;
   width: 100%;
-  z-index: 99999;
+  z-index: 2147483647;
 }
 
 .video-play-btn {
