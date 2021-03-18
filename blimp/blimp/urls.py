@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/v1/register/', core_views.CreateUserView.as_view(), name='signup_api'),
     path('api/v1/token/', jwt_views.TokenObtainPairView.as_view(), name='token_auth'),
     path('api/v1/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/logout/', core_views.logout_api, name='logout_api'),
     path('api/v1/me/', core_views.profile_api, name='profile_api'),
     path('api/v1/people/', core_views.people_api, name='people_api'),
     re_path(r'api/v1/people/(?P<pk>[0-9]+)/', core_views.people_detail_api, name="people_detail_api"),
