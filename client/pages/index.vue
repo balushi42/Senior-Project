@@ -52,7 +52,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Api from '~/services/api';
 
 export default Vue.extend({
   data () {
@@ -61,9 +60,6 @@ export default Vue.extend({
       closingBar: false,
       transitioning: false
     }
-  },
-  mounted() {
-    // Api.upload(this.$axios);
   },
   methods: {
     open () {

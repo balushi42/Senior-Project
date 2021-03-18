@@ -71,7 +71,7 @@ export default {
         },
         endpoints: {
           login: { url: '/api/v1/token/', method: 'post' },
-          refresh: { url: '/api/v1/refresh/', method: 'post' },
+          refresh: { url: '/api/v1/token/refresh/', method: 'post' },
           user: { url: '/api/v1/me/', method: 'get' },
         },
         // autoLogout: false
