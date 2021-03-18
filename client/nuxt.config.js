@@ -15,6 +15,10 @@ export default {
     ]
   },
 
+  loading: {
+    color: 'rgb(16, 185, 129)'
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/css/main.scss'
@@ -73,6 +77,7 @@ export default {
           login: { url: '/api/v1/token/', method: 'post' },
           refresh: { url: '/api/v1/token/refresh/', method: 'post' },
           user: { url: '/api/v1/me/', method: 'get' },
+          logout: { url: '/api/v1/logout/', method: 'get' }
         },
         // autoLogout: false
       }

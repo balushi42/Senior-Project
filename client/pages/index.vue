@@ -33,15 +33,21 @@
             </NuxtLink>
           </li>
 
-          <li class="md:ml-auto md:mr-2" v-if="!$auth.loggedIn">
+          <li class="md:ml-auto md:mr-2" v-if="!loggedIn">
             <NuxtLink to="/login" tag="a" class="btn-primary md:rounded-md">
               Login
             </NuxtLink>
           </li>
-          <li class="md:mr-2" v-if="!$auth.loggedIn">
+          <li class="md:mr-2" v-if="!loggedIn">
             <NuxtLink to="/signup" tag="a">
               Signup
             </NuxtLink>
+          </li>
+
+          <li class="md:ml-auto md:mr-2" v-if="loggedIn">
+            <a class="btn-primary cursor-pointer md:rounded-md" @click="logout">
+              Logout
+            </a>
           </li>
         </ul>
       </div>
@@ -58,10 +64,15 @@ export default Vue.extend({
     return {
       showBar: false,
       closingBar: false,
-      transitioning: false
+      transitioning: false,
+      loggedIn: this.$auth.loggedIn
     }
   },
   methods: {
+    logout() {
+      this.$auth.logout();
+      this.loggedIn = false;
+    },
     open () {
       if (this.transitioning) return;
       this.transitioning = true;
