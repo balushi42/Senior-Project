@@ -14,6 +14,13 @@ def profile_api(request):
         serializer = ProfileSerializer(request.user.profile)
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def logout_api(request):
+    if request.method == 'GET':
+        return Response()
+
 @api_view(['GET'])
 def people_api(request):
     if request.method == 'GET':
