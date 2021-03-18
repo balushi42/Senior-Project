@@ -11,6 +11,11 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        Illegal_chars = ['@',]
+        for c in Illegal_chars:
+            if c in validated_data['username']:
+                raise serializers.ValidationError({"username": "Username selection cannot contain illegal characters"})
+
         user = User(
             email=validated_data['email'],
             username=validated_data['username']
