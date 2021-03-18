@@ -6,7 +6,7 @@ nav {
   }
 
   div {
-    @apply flex flex-row self-end;
+    @apply flex flex-row self-end w-full;
 
     button {
       @apply md:hidden inline ml-2 pl-2 p-2 self-center hover:bg-transparent;
@@ -14,7 +14,7 @@ nav {
   }
 
   ul {
-    @apply hidden md:flex md:flex-row;
+    @apply hidden md:flex md:flex-row w-full;
 
     li {
       @apply flex self-end;
@@ -42,7 +42,7 @@ nav {
       transform: translate3d(0, 0, 0);
     }
 
-    @apply fixed md:relative bg-white md:bg-transparent h-screen md:h-auto w-screen md:w-auto block md:flex -left-full md:left-0 md:animate-none;
+    @apply fixed md:relative bg-white md:bg-transparent h-screen md:h-auto w-screen block md:flex -left-full md:left-0 md:animate-none md:w-full;
 
     li {
       @apply w-screen md:w-auto;
@@ -58,8 +58,8 @@ nav {
     transform: translate3d(0, 0, 0);
   }
 
-  a:hover:not(.nav-header) {
-    @apply bg-green-500 text-white rounded-sm;
+  a:hover:not(.nav-header):not(.btn-primary) {
+    @apply bg-green-500 text-white rounded-md;
   }
 }
 

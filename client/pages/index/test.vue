@@ -15,7 +15,7 @@ export default Vue.extend({
         }],
         options: {
           autoplay: false,
-          volume: 0.5,
+          volume: 0.9,
           poster: ''
         }
       }

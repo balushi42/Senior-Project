@@ -32,6 +32,17 @@
               Popular
             </NuxtLink>
           </li>
+
+          <li class="md:ml-auto md:mr-2" v-if="!$auth.loggedIn">
+            <NuxtLink to="/login" tag="a" class="btn-primary md:rounded-md">
+              Login
+            </NuxtLink>
+          </li>
+          <li class="md:mr-2" v-if="!$auth.loggedIn">
+            <NuxtLink to="/signup" tag="a">
+              Signup
+            </NuxtLink>
+          </li>
         </ul>
       </div>
     </nav>
@@ -41,6 +52,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Api from '~/services/api';
 
 export default Vue.extend({
   data () {
@@ -49,6 +61,9 @@ export default Vue.extend({
       closingBar: false,
       transitioning: false
     }
+  },
+  mounted() {
+    // Api.upload(this.$axios);
   },
   methods: {
     open () {

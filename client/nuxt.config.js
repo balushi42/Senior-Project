@@ -48,11 +48,41 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth-next'
   ],
 
+  auth: {
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        token: {
+          property: 'access',
+          maxAge: 3000,
+          // type: 'Bearer'
+        },
+        refreshToken: {
+          property: 'refresh',
+          data: 'refresh',
+          maxAge: 60 * 60 * 24
+        },
+        user: {
+          property: 'user',
+        },
+        endpoints: {
+          login: { url: '/api/v1/token/', method: 'post' },
+          refresh: { url: '/api/v1/refresh/', method: 'post' },
+          user: { url: '/api/v1/me/', method: 'get' },
+        },
+        // autoLogout: false
+      }
+    }
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:8000'
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

@@ -10,6 +10,10 @@ input {
   @apply block focus:outline-none focus:ring focus:ring-green-400 focus:border-green-400 px-4 py-3 border-gray-300 border-2 rounded w-full md:w-6/12;
 }
 
+input.error {
+  @apply border-red-500 focus:ring-red-500;
+}
+
 .btn {
   @apply py-3 px-4 font-bold rounded-md;
 }
@@ -36,6 +40,34 @@ input {
 
 .btn-primary:focus {
   @apply outline-none ring ring-green-400;
+}
+
+.btn.loading {
+  @apply text-transparent pointer-events-none relative select-none;
+}
+
+.input-help {
+  @apply text-left w-full md:w-6/12;
+}
+
+p.error,
+div.error {
+  @apply text-red-600;
+}
+
+.btn.loading::after {
+  left: calc(50% - 0.5em);
+  top: calc(50% - 0.5em);
+  content: "";
+  width: 1em;
+  height: 1em;
+  border: 2px solid #dbdbdb;
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: spin 0.7s linear infinite;
+
+  @apply absolute block;
 }
 
 // Navigation styling
