@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from library.exceptions import *
 from .models import Video, React, Category, Emoji
+from core.serializers import *
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -11,6 +12,8 @@ class VideoSerializer(serializers.ModelSerializer):
 		elif file.size > 10485760:
 			raise LargeFileSize()
 		return data
+
+	user = UserSerializer()
 
 	class Meta:
 		model = Video
