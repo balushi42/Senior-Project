@@ -32,6 +32,11 @@
               Popular
             </NuxtLink>
           </li>
+          <li>
+            <NuxtLink to="/submit" tag="a" v-if="loggedIn">
+              Post
+            </NuxtLink>
+          </li>
 
           <li class="md:ml-auto md:mr-2" v-if="!loggedIn">
             <NuxtLink to="/login" tag="a" class="btn-primary md:rounded-md">

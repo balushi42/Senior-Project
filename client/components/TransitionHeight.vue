@@ -69,7 +69,7 @@ export default Vue.extend({
 <style scoped>
 .expand-enter-active,
 .expand-leave-active {
-  transition: all 0.2s ease-in-out;
+  transition: height 0.2s ease-in-out, margin 0.2s ease-in-out;
   overflow: hidden;
 }
 
