@@ -43,7 +43,8 @@ export default {
       icons: {
         solid: [
           'faBars',
-          'faTimes'
+          'faTimes',
+          'faUpload'
         ]
       }
     }]
