@@ -33,4 +33,21 @@ export default class Api {
             throw e;
         }
     }
+
+    static async newPost($axios: NuxtAxiosInstance, title: string, category: number, file: File) {
+        const form = new FormData();
+        form.append('file', file);
+        form.append('title', title);
+        form.append('category', category.toString());
+
+        try {
+            await $axios.post('/api/v1/videos/upload/', form, {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            });
+        } catch (e) {
+            throw e;
+        }
+    }
 }
