@@ -6,7 +6,7 @@ from .models import Video, React, Category, Emoji
 class VideoSerializer(serializers.ModelSerializer):
 	def validate(self, data):
 		file = data['file']
-		if not file.name.endswith('.mp4'):
+		if not (file.name.endswith('.mp4') or file.name.endswith('.m4v')):
 			raise InvalidFileFormat()
 		elif file.size > 10485760:
 			raise LargeFileSize()
