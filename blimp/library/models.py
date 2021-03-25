@@ -15,6 +15,17 @@ class Category(models.Model):
     PLI = models.ManyToManyField(Emoji, related_name="PLI_catagories")
     NHI = models.ManyToManyField(Emoji, related_name="NHI_catagories")
     NLI = models.ManyToManyField(Emoji, related_name="NLI_catagories")
+
+    PHI_Gdelta = models.IntegerField(default=10)
+    PLI_Gdelta = models.IntegerField(default=5)
+    NHI_Gdelta = models.IntegerField(default=0)
+    NLI_Gdelta = models.IntegerField(default=-10)
+    
+    PHI_Vdelta = models.IntegerField(default=10)
+    PLI_Vdelta = models.IntegerField(default=0)
+    NHI_Vdelta = models.IntegerField(default=5)
+    NLI_Vdelta = models.IntegerField(default=-10)
+    
     def __str__(self):
         return self.title
 
@@ -31,14 +42,15 @@ class Video(models.Model):
         PLI = React.objects.filter(emoji__in=self.category.PLI.all(), video=self).count()
         NHI = React.objects.filter(emoji__in=self.category.NHI.all(), video=self).count()
         NLI = React.objects.filter(emoji__in=self.category.NLI.all(), video=self).count()
-        return PHI*10+PLI*5+NLI*-10
+        return PHI*self.category.PHI_Gdelta+PLI*self.category.PLI_Gdelta+NHI*self.category.NHI_Gdelta+NLI*self.category.NLI_Gdelta
 
     def getVirVal(self):
         PHI = React.objects.filter(emoji__in=self.category.PHI.all(), video=self).count()
         PLI = React.objects.filter(emoji__in=self.category.PLI.all(), video=self).count()
         NHI = React.objects.filter(emoji__in=self.category.NHI.all(), video=self).count()
         NLI = React.objects.filter(emoji__in=self.category.NLI.all(), video=self).count()
-        return PHI*10+NHI*5+NLI*-10
+        return PHI*self.category.PHI_Vdelta+PLI*self.category.PLI_Vdelta+NHI*self.category.NHI_Vdelta+NLI*self.category.NLI_Vdelta
+
     
 class React(models.Model):
     emoji = models.ForeignKey(Emoji, on_delete=models.PROTECT, related_name="reactions")
