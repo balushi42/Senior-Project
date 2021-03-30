@@ -6,7 +6,7 @@
     <TransitionHeight>
       <p v-if="detailError.length > 0" class="error mb-3 font-semibold">{{  detailError }}</p>
     </TransitionHeight>
-    <input id="username" type="text" name="username" placeholder="Username" :class="{ 'error': loginErrors.length > 0 }" @input="resetUsername" v-model="username">
+    <input id="username" type="text" name="username" placeholder="Username" :class="{ 'error': loginErrors.length > 0 }" @input="resetUsername" v-model="username" @keydown.enter="login">
     <TransitionHeight>
       <div v-if="loginErrors.length > 0" class="input-help error">
         <div v-for="error in loginErrors" :key="error">
@@ -15,7 +15,7 @@
       </div>
     </TransitionHeight>
     <div class="mb-4"></div>
-    <input id="password" type="password" name="password" placeholder="Password" :class="{ 'error': passwordErrors.length > 0 }" @input="resetPassword" v-model="password">
+    <input id="password" type="password" name="password" placeholder="Password" :class="{ 'error': passwordErrors.length > 0 }" @input="resetPassword" v-model="password" @keydown.enter="login">
     <TransitionHeight>
       <div v-if="passwordErrors.length > 0" class="input-help error">
         <div v-for="error in passwordErrors" :key="error">
@@ -23,8 +23,8 @@
         </div>
       </div>
     </TransitionHeight>
-    <NuxtLink class="btn btn-link mt-4" to="/signup" tag="button">
-      I need an account
+    <NuxtLink to="/signup" custom v-slot="{ navigate }">
+      <button class="btn btn-link mt-4" @click="navigate">I need an account</button>
     </NuxtLink>
     <button class="btn btn-primary mt-4" tag="button" :class="{ loading }" @click="login">
       Login
@@ -71,7 +71,7 @@ export default Vue.extend({
         this.loginErrors = e.response.data.username ?? [];
         this.passwordErrors = e.response.data.password ?? [];
         this.detailError = e.response.data.detail ?? '';
-        
+
         if (e.response.status !== 400 && e.response.status !== 401) {
           this.detailError = 'Internal server error';
         }

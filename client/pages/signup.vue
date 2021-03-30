@@ -6,7 +6,7 @@
     <TransitionHeight>
       <p v-if="detailError.length > 0" class="error mb-3 font-semibold">{{ detailError }}</p>
     </TransitionHeight>
-    <input type="text" name="email" id="email" placeholder="Email" v-model="email">
+    <input type="text" name="email" id="email" placeholder="Email" v-model="email" @keydown.enter="signup">
     <TransitionHeight>
       <div v-if="emailErrors.length > 0" class="input-help error">
         <div v-for="error in emailErrors" :key="error">
@@ -15,7 +15,7 @@
       </div>
     </TransitionHeight>
     <div class="mb-4"></div>
-    <input type="text" name="username" id="username" placeholder="Username" v-model="username">
+    <input type="text" name="username" id="username" placeholder="Username" v-model="username" @keydown.enter="signup">
     <TransitionHeight>
       <div v-if="loginErrors.length > 0" class="input-help error">
         <div v-for="error in loginErrors" :key="error">
@@ -24,7 +24,7 @@
       </div>
     </TransitionHeight>
     <div class="mb-4"></div>
-    <input type="password" name="password" id="password" placeholder="Password" v-model="password">
+    <input type="password" name="password" id="password" placeholder="Password" v-model="password" @keydown.enter="signup">
     <TransitionHeight>
       <div v-if="passwordErrors.length > 0" class="input-help error">
         <div v-for="error in passwordErrors" :key="error">
@@ -32,7 +32,9 @@
         </div>
       </div>
     </TransitionHeight>
-    <NuxtLink class="btn btn-link mt-4" to="/login">I already have an account</NuxtLink>
+    <NuxtLink to="/login" custom v-slot="{ navigate }">
+      <button class="btn btn-link mt-4" @click="navigate">I already have an account</button>
+    </NuxtLink>
     <button class="btn btn-primary mt-4" :class="{ loading }" @click="signup">Create Account</button>
   </div>
 </template>
