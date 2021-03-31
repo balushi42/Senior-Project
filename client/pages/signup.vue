@@ -32,8 +32,8 @@
         </div>
       </div>
     </TransitionHeight>
-    <NuxtLink to="/login" custom v-slot="{ navigate }">
-      <button class="btn btn-link mt-4" @click="navigate">I already have an account</button>
+    <NuxtLink to="/login" class="btn btn-link mt-4">
+      I already have an account
     </NuxtLink>
     <button class="btn btn-primary mt-4" :class="{ loading }" @click="signup">Create Account</button>
   </div>
