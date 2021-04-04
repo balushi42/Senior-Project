@@ -7,7 +7,9 @@
           Posted by <NuxtLink :to="`/profile/${video.user.id}`">@{{ video.user.username }}</NuxtLink>
         </div>
       </div>
-      <Video :sources="video.sources" :options="options"/>
+      <div class="video-card-container">
+        <Video class="video-card-video" :sources="video.sources" :options="options"/>
+      </div>
       <div class="video-card-footer">
         <NuxtLink :to="`/video/${video.id}`">{{ 0 }} comments</NuxtLink>
         <button class="btn btn-link btn-report">Report</button>
@@ -79,5 +81,20 @@ export default Vue.extend({
 
 .btn-report {
   @apply py-1;
+}
+
+.video-card-container {
+  width: 100%;
+  padding-top: 56.25%;
+  height: 0;
+  position: relative;
+}
+
+.video-card-video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>
