@@ -5,6 +5,26 @@ export interface Category {
     title: string;
 }
 
+export interface User {
+    id: number,
+    username: string,
+}
+
+export interface Sources {
+    src: string,
+    type: 'video/mp4',
+}
+
+export interface Video {
+    id: number,
+    title: string,
+    category: number,
+    user: User
+    date_uploaded: string,
+    file: string,
+    sources?: Sources[],
+}
+
 export default class Api {
     static async signup($axios: NuxtAxiosInstance, email: string, username: string, password: string) {
         try {
@@ -21,6 +41,14 @@ export default class Api {
     static async upload($axios: NuxtAxiosInstance) {
         try {
             await $axios.$post('/api/v1/videos/upload/');
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async getViralVideos($axios: NuxtAxiosInstance): Promise<Video[]> {
+        try {
+            return await $axios.$get('/api/v1/videos/viral/');
         } catch (e) {
             throw e;
         }

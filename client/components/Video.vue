@@ -587,6 +587,7 @@ export default Vue.extend({
   height: 2rem;
   width: 100%;
   z-index: 2147483647;
+  background: rgba(0, 0, 0, 0.281);
 }
 
 .video-play-btn {
