@@ -4,6 +4,13 @@ from .models import Video, React, Category, Emoji
 from core.serializers import *
 
 
+class CategorySerializer(serializers.ModelSerializer):
+
+	class Meta:
+		model = Category
+		fields = ['id', 'title']
+		read_only_fields = ['id', 'title']
+
 class VideoSerializer(serializers.ModelSerializer):
 	def validate(self, data):
 		file = data['file']
@@ -14,7 +21,7 @@ class VideoSerializer(serializers.ModelSerializer):
 		return data
 
 	user = UserSerializer()
-
+	category = CategorySerializer(read_only=True, many=True)
 	class Meta:
 		model = Video
 		fields = ('id', 'title', 'category', 'user', 'date_uploaded', 'file')
@@ -42,12 +49,6 @@ class VideoReactionSerializer(serializers.ModelSerializer):
 		fields = ('reactions',)
 
 
-class CategorySerializer(serializers.ModelSerializer):
-
-	class Meta:
-		model = Category
-		fields = ['id', 'title']
-		read_only_fields = ['id', 'title']
 
 class EmojiSerializer(serializers.ModelSerializer):
 
