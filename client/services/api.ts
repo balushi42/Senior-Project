@@ -54,6 +54,23 @@ export default class Api {
         }
     }
 
+    static async getVideoDetail($axios: NuxtAxiosInstance, videoId: string): Promise<Video> {
+        try {
+            return await $axios.$get(`/api/v1/videos/${videoId}`);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async getProfile($axios: NuxtAxiosInstance, userId: string): Promise<User> {
+        try {
+            const res = await $axios.$get(`/api/v1/people/${userId}`);
+            return res.user;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     static async getCategories($axios: NuxtAxiosInstance): Promise<Category[]> {
         try {
             return await $axios.$get('/api/v1/categories/');

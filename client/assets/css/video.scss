@@ -1,0 +1,48 @@
+.video-card {
+  border-width: 1px;
+
+  @apply border-solid rounded-md border-gray-300 w-full max-w-3xl md:mx-auto mb-4;
+}
+
+.video-card-author {
+  @apply font-normal text-sm;
+}
+
+.video-card-author > a {
+  @apply hover:underline;
+}
+
+.video-card-title {
+  @apply block p-2 font-semibold;
+}
+
+.video-card-title > a {
+  @apply text-green-700 hover:underline;
+}
+
+.video-card-footer {
+  @apply p-2 flex justify-between items-center;
+}
+
+.video-card-footer > a {
+  @apply hover:underline;
+}
+
+.btn-report {
+  @apply py-1;
+}
+
+.video-card-container {
+  width: 100%;
+  padding-top: 56.25%;
+  height: 0;
+  position: relative;
+}
+
+.video-card-video {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}

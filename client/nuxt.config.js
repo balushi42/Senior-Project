@@ -54,7 +54,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    '@nuxtjs/proxy'
   ],
 
   auth: {
@@ -85,9 +86,13 @@ export default {
     }
   },
 
+  proxy: [
+    'http://localhost:8000/api'
+  ],
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://localhost:8000'
+    proxy: true
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -1,8 +1,8 @@
 <template>
   <div class="container mx-auto p-3 md:p-0 mt-5">
-    <article v-for="video in videos" :key="video.id" class="video-card">
+    <article class="video-card" v-if="!error">
       <div class="video-card-title">
-        <NuxtLink :to="`/video/${video.id}`">{{ video.title }}</NuxtLink>
+        <h1 class="text-xl font-normal">{{ video.title }}</h1>
         <div class="video-card-author">
           Posted by <NuxtLink :to="`/profile/${video.user.id}`">@{{ video.user.username }}</NuxtLink>
         </div>
@@ -11,30 +11,39 @@
         <Video class="video-card-video" :sources="video.sources" :options="options"/>
       </div>
       <div class="video-card-footer">
-        <NuxtLink :to="`/video/${video.id}`">{{ 0 }} comments</NuxtLink>
+        <div class="select-none">&nbsp;</div>
         <button class="btn btn-link btn-report">Report</button>
       </div>
+      <h3 class="text-xl">Comments</h3>
     </article>
+    <div v-if="error" class="text-center text-3xl">
+      Video not found!
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Api from '~/services/api';
-
+import Vue from 'vue'
+import Api, { Video } from '~/services/api';
 export default Vue.extend({
-  middleware: 'auth',
-  auth: false,
   async asyncData(context) {
-    const videos = await Api.getViralVideos(context.app.$axios);
-    for (let video of videos) {
-      video.sources = [{
-        src: `http://localhost:8000${video.file}`,
+    let video: Video|null;
+    let error = false;
+
+    try {
+      const res = await Api.getVideoDetail(context.app.$axios, context.params.id);
+      res.sources = [{
+        src: `http://localhost:8000${res.file}`,
         type: 'video/mp4'
       }];
+
+      video = res;
+    } catch (e) {
+      error = true;
     }
 
-    return { videos }
+    //@ts-ignore
+    return { video, error };
   },
   data () {
     return {
@@ -45,9 +54,13 @@ export default Vue.extend({
       }
     }
   }
-})
+});
 </script>
 
-<style lang="postcss" scoped>
+<style lang="scss" scoped>
 @import '~/assets/css/video.scss';
+
+.video-card {
+  @apply border-0;
+}
 </style>
