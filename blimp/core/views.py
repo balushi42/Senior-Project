@@ -81,4 +81,4 @@ def Chart_View(request,pk):
     PLI = React.objects.filter(emoji__in=video.category.PLI.all(), video=video).count()
     NHI = React.objects.filter(emoji__in=video.category.NHI.all(), video=video).count()
     NLI = React.objects.filter(emoji__in=video.category.NLI.all(), video=video).count()
-    return render(request, 'Charts.html', {'PHI_VAL':PHI,"PLI_VAL":PLI,"NHI_VAL":NHI,"NLI_VAL":NLI})
+    return render(request, 'Charts.html', {"video":video,'PHI_VAL':PHI,"PLI_VAL":PLI,"NHI_VAL":NHI,"NLI_VAL":NLI})
