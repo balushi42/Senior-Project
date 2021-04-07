@@ -25,6 +25,13 @@ export interface Video {
     sources?: Sources[],
 }
 
+export interface Reaction {
+    id: string,
+    text: string,
+}
+
+export type Reactions = Record<'PHI'|'PLI'|'NLI'|'NHI', Reaction[]>;
+
 export default class Api {
     static async signup($axios: NuxtAxiosInstance, email: string, username: string, password: string) {
         try {
@@ -74,6 +81,32 @@ export default class Api {
     static async getCategories($axios: NuxtAxiosInstance): Promise<Category[]> {
         try {
             return await $axios.$get('/api/v1/categories/');
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async getReactionOptions($axios: NuxtAxiosInstance, categoryId: number): Promise<Reactions> {
+        try {
+            const reactions: Reactions = await $axios.$get(`/api/v1/categories/${categoryId}/`);
+            const keys = Object.keys(reactions) as ('PHI'|'PLI'|'NLI'|'NHI')[];
+            for (let key of keys) {
+                reactions[key] = reactions[key].slice(0, 3);
+            }
+
+            return reactions;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async newReaction($axios: NuxtAxiosInstance, video: number, emoji: string, reaction: string, timestamp: string) {
+        try {
+            await $axios.$post(`/api/v1/reactions/${video}/`, {
+                emoji,
+                text: reaction,
+                timestamp
+            });
         } catch (e) {
             throw e;
         }

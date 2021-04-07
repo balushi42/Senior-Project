@@ -1,29 +1,36 @@
 <template>
     <div id="app">
       <div class="container">
+        <div class="video-reaction-modal-backdrop flex items-center justify-center" v-if="showModal" @click.self="dismissModal">
+          <div class="video-reaction-modal">
+            <div class="video-reaction-modal-header">Reaction</div>
+            <textarea class="video-reaction-modal-text" name="" id="" cols="30" rows="5" v-model="reactionText"></textarea>
+            <button class="btn btn-primary w-full ml-auto" @click="submitReaction">{{ selectedEmoji.text }}</button>
+          </div>
+        </div>
         <div class="video-container" @mouseenter="mouseEnterVideo" @mouseleave="mouseLeaveVideo" ref="videoContainer">
           <video class="video" :poster="options.poster" @click="screenClick" ref="video">
             <source v-for="source in sources" :src="source.src" :type="source.type" :key="source.src" />
           </video>
           <div class="video-reaction-specific" :style="reactionStyle" ref="specific">
-            <div class="video-reaction-specific-option" ref="specific" v-for="emoji of reaction.options" :key="emoji" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
-              {{ emoji }}
+            <div class="video-reaction-specific-option" ref="specific" v-for="emoji of reaction.options" :key="emoji.id" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave" @click="selectedReaction(emoji)">
+              {{ emoji.text }}
             </div>
           </div>
           <div class="video-reaction-bar" :class="{'video-reaction-bar-hidden': !state.contrlShow}">
             <div class="video-reaction-options" :class="{'video-reaction-options-visible': reaction.showOptions}">
               <div class="video-reaction-col">
-                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🤬']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
-                  🤬
+                <div v-if="category['NHI'] && category['NHI'].length > 0" class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['NHI']}" @mouseover="reactionOptionHover($event, 'NHI')" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                  {{ category['NHI'].length > 1 ? category['NHI'][1]['text'] : category['NHI'][0]['text'] }}
                 </div>
-                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🙁']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
-                  🙁
+                <div v-if="category['NLI'] && category['NLI'].length > 0" class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['NLI']}" @mouseover="reactionOptionHover($event, 'NLI')" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                  {{ category['NLI'].length > 1 ? category['NLI'][1]['text'] : category['NLI'][0]['text'] }}
                 </div>
-                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🙂']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
-                  🙂
+                <div v-if="category['PLI'] && category['PLI'].length > 0" class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['PLI']}" @mouseover="reactionOptionHover($event, 'PLI')" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                  {{ category['PLI'].length > 1 ? category['PLI'][1]['text'] : category['PLI'][0]['text'] }}
                 </div>
-                <div class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['🤣']}" @mouseover="reactionOptionHover" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
-                  🤣
+                <div v-if="category['PHI'] && category['PHI'].length > 0" class="video-reaction-option" :class="{'video-reaction-option-active': reaction.active['PHI']}" @mouseover="reactionOptionHover($event, 'PHI')" @mouseenter="reactionMouseEnter" @mouseleave="reactionMouseLeave">
+                  {{ category['PHI'].length > 1 ? category['PHI'][1]['text'] : category['PHI'][0]['text'] }}
                 </div>
               </div>
             </div>
@@ -105,6 +112,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import Api from '~/services/api';
 
 const getMousePosition = function (e: MouseEvent, type = "x") {
   if (type === "x") {
@@ -141,9 +149,19 @@ export default Vue.extend({
         };
       },
     },
+    videoId: Number,
+    category: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
   },
   data() {
     return {
+      reactionText: '',
+      selectedEmoji: {} as {id: string, text: string},
+      showModal: false,
       $video: null as HTMLVideoElement|null,
       video: {
         $videoSlider: null as Element|null,
@@ -189,17 +207,11 @@ export default Vue.extend({
       reaction: {
         showOptions: false,
         options: ['😂', '🤣', '😍'],
-        sets: {
-          '🤣': ['😂', '🤣', '😍'],
-          '🙂': ['😐', '🙂', '😄'],
-          '🙁': ['😞', '🙁', '😑'],
-          '🤬': ['👿', '🤬', '😤'],
-        } as { [key: string]: string[] },
         active: {
-          '🤣': false,
-          '🙂': false,
-          '🙁': false,
-          '🤬': false,
+          'NHI': false,
+          'NLI': false,
+          'PLI': false,
+          'PHI': false,
         } as { [key: string]: boolean }
       },
       reactionStyle: {
@@ -436,27 +448,29 @@ export default Vue.extend({
         }
       }
     },
-    reactionOptionHover(e: MouseEvent) {
+    reactionOptionHover(e: MouseEvent, category: string) {
       if (!e.target) return;
       const target = e.target as HTMLElement;
 
       if (!target.parentElement) return;
+      console.log(e, category);
 
-      if (target.textContent) {
-        const emoji = target.textContent.trim();
-
-        this.reaction.options = this.reaction.sets[emoji];
-        const keys = Object.keys(this.reaction.active);
-        for (const key of keys) {
-          this.reaction.active[key] = (key === emoji);
-        }
+      this.reaction.options = this.category[category];
+      const keys = Object.keys(this.reaction.active);
+      for (const key of keys) {
+        this.reaction.active[key] = (key === category);
       }
 
       const rect = target.getBoundingClientRect();
       const parentRect = target.parentElement.getBoundingClientRect();
 
       this.reactionStyle.right = `${rect.right}px`;
-      this.reactionStyle.left = `${rect.left - rect.width}px`;
+      if (this.reaction.options.length < 2) {
+        this.reactionStyle.left = `${rect.left}px`;
+      } else {
+        this.reactionStyle.left = `${rect.left - rect.width}px`;
+      }
+
       this.reactionStyle.top = `calc(${parentRect.top - rect.width}px - 0.5em)`;
       this.reactionStyle.bottom = `${parentRect.bottom}px`;
 
@@ -486,12 +500,56 @@ export default Vue.extend({
 
         this.reaction.showOptions = false;
       }, 2000);
+    },
+    selectedReaction(emoji: any) {
+      if (this.$video) {
+        this.selectedEmoji = emoji;
+        this.state.playing = false;
+        this.$video.pause();
+
+        this.showModal = true;
+      }
+    },
+    dismissModal() {
+      this.reactionText = '';
+      this.showModal = false;
+    },
+    async submitReaction() {
+      if (this.$video) {
+        try {
+          await Api.newReaction(this.$axios, this.videoId, this.selectedEmoji.id, this.reactionText, `00:${timeParse(this.$video.currentTime)}`);
+          this.showModal = false;
+        } catch (e) {
+          console.log(e.response.data);
+        } 
+      }
     }
   },
 });
 </script>
 
 <style class="scss">
+.video-reaction-modal-backdrop {
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 9998;
+
+  @apply absolute w-full h-full;
+}
+
+.video-reaction-modal-header {
+  @apply text-lg;
+}
+
+.video-reaction-modal-text {
+  @apply outline-none resize-none border-2 border-gray-300 p-2 block mb-2;
+}
+
+.video-reaction-modal {
+  z-index: 9999;
+
+  @apply p-2 rounded-md absolute bg-white;
+}
+
 .video-reaction-specific {
   transition: opacity 0.2s;
 

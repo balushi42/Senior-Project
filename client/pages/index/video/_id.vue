@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="video-card-container">
-        <Video class="video-card-video" :sources="video.sources" :options="options"/>
+        <Video class="video-card-video" :sources="video.sources" :options="options" :videoId="id" :category="category"/>
       </div>
       <div class="video-card-footer">
         <div class="select-none">&nbsp;</div>
@@ -29,6 +29,7 @@ export default Vue.extend({
   async asyncData(context) {
     let video: Video|null;
     let error = false;
+    let category;
 
     try {
       const res = await Api.getVideoDetail(context.app.$axios, context.params.id);
@@ -37,13 +38,15 @@ export default Vue.extend({
         type: 'video/mp4'
       }];
 
+      category = await Api.getReactionOptions(context.app.$axios, res.category);
+
       video = res;
     } catch (e) {
       error = true;
     }
 
     //@ts-ignore
-    return { video, error };
+    return { video, error, category, id: context.params.id };
   },
   data () {
     return {
