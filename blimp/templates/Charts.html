@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chart</title>
     <script src='https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js'></script>
+    <style>
+    .chartStyle {
+        border: 2px solid #ccc;
+        padding: 10px;
+        width: 20em;
+    }
+    </style>
 </head>
 <body>
     Title:  {{ video.title }}
@@ -18,7 +25,7 @@
     V-Value: {{video.viral}}
 
 
-    <canvas id="myChart"></canvas>
+    <canvas class="chartStyle" id="myChart"></canvas>
 <script>
 var defaultData = [{{ PHI_VAL }},{{ PLI_VAL }},{{ NHI_VAL }},{{ NLI_VAL }}]
 var labels = ['PHI','PLI','NHI','NLA'];
