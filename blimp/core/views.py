@@ -5,6 +5,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
+from library.models import *
 from core.serializers import *
 
 @api_view(['GET'])
@@ -72,3 +73,12 @@ class CreateUserView(CreateAPIView):
         permissions.AllowAny
     ]
     serializer_class = UserSerializer
+
+
+def Chart_View(request,pk):
+    video = get_object_or_404(Video, id=pk)
+    PHI = React.objects.filter(emoji__in=video.category.PHI.all(), video=video).count()
+    PLI = React.objects.filter(emoji__in=video.category.PLI.all(), video=video).count()
+    NHI = React.objects.filter(emoji__in=video.category.NHI.all(), video=video).count()
+    NLI = React.objects.filter(emoji__in=video.category.NLI.all(), video=video).count()
+    return render(request, 'Charts.html', {'PHI_VAL':PHI,"PLI_VAL":PLI,"NHI_VAL":NHI,"NLI_VAL":NLI})

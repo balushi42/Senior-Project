@@ -47,6 +47,9 @@ urlpatterns = [
     path('api/v1/categories/', library_views.category_list, name='category_list'),
     re_path(r'api/v1/categories/(?P<pk>[0-9]+)/', library_views.category_detail, name="category_detail"),
 
+    re_path(r'charts/(?P<pk>[0-9]+)/', core_views.Chart_View, name='chart_view'),
+    
+
 ]
 
 if settings.DEBUG:
