@@ -55,7 +55,7 @@ def video_upload_api(request):
             data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'user': request.user.pk, 'file': request.FILES["file"] }
         except MultiValueDictKeyError:
             data = {'title': request.data.get('title'), 'category': request.data.get('category'), 'user': request.user.pk, 'file': None }
-        serializer = VideoSerializer(data=data)
+        serializer = VideoUploadSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

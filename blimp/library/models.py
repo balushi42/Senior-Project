@@ -30,7 +30,8 @@ class Category(models.Model):
         return self.title
 
 class Video(models.Model):
-    category = models.ManyToManyField(Category,related_name="videos")
+    #category = models.ManyToManyField(Category,related_name="videos")
+    category = models.ForeignKey(Category,related_name="videos", on_delete=models.CASCADE)
     file = models.FileField(null=False, blank=False)
     title = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="videos")
@@ -38,24 +39,35 @@ class Video(models.Model):
     group = models.IntegerField(default=0)
     viral = models.IntegerField(default=0)
     def getGrpVal(self):
-        total = 0
-        for c in self.category.all():
-            PHI = PHI + React.objects.filter(emoji__in=self.c.PHI.all(), video=self).count()
-            PLI = PLI + React.objects.filter(emoji__in=self.c.PLI.all(), video=self).count()
-            NHI = NHI + React.objects.filter(emoji__in=self.c.NHI.all(), video=self).count()
-            NLI = NLI + React.objects.filter(emoji__in=self.c.NLI.all(), video=self).count()
-            total = total + PHI*self.c.PHI_Gdelta+PLI*self.c.PLI_Gdelta+NHI*self.c.NHI_Gdelta+NLI*self.c.NLI_Gdelta
-        return total
+        PHI = React.objects.filter(emoji__in=self.category.PHI.all(), video=self).count()
+        PLI = React.objects.filter(emoji__in=self.category.PLI.all(), video=self).count()
+        NHI = React.objects.filter(emoji__in=self.category.NHI.all(), video=self).count()
+        NLI = React.objects.filter(emoji__in=self.category.NLI.all(), video=self).count()
+        return PHI*self.category.PHI_Gdelta+PLI*self.category.PLI_Gdelta+NHI*self.category.NHI_Gdelta+NLI*self.category.NLI_Gdelta
+        # total = 0
+        # for c in self.category.all():
+        #     PHI = PHI + React.objects.filter(emoji__in=self.c.PHI.all(), video=self).count()
+        #     PLI = PLI + React.objects.filter(emoji__in=self.c.PLI.all(), video=self).count()
+        #     NHI = NHI + React.objects.filter(emoji__in=self.c.NHI.all(), video=self).count()
+        #     NLI = NLI + React.objects.filter(emoji__in=self.c.NLI.all(), video=self).count()
+        #     total = total + PHI*self.c.PHI_Gdelta+PLI*self.c.PLI_Gdelta+NHI*self.c.NHI_Gdelta+NLI*self.c.NLI_Gdelta
+        # return total
     
     def getVirVal(self):
-        total = 0
-        for c in self.category.all():
-            PHI = PHI + React.objects.filter(emoji__in=self.c.PHI.all(), video=self).count()
-            PLI = PLI + React.objects.filter(emoji__in=self.c.PLI.all(), video=self).count()
-            NHI = NHI + React.objects.filter(emoji__in=self.c.NHI.all(), video=self).count()
-            NLI = NLI + React.objects.filter(emoji__in=self.c.NLI.all(), video=self).count()
-            total = total + PHI*self.c.PHI_Vdelta+PLI*self.c.PLI_Vdelta+NHI*self.c.NHI_Vdelta+NLI*self.c.NLI_Vdelta
-        return total
+        PHI = React.objects.filter(emoji__in=self.category.PHI.all(), video=self).count()
+        PLI = React.objects.filter(emoji__in=self.category.PLI.all(), video=self).count()
+        NHI = React.objects.filter(emoji__in=self.category.NHI.all(), video=self).count()
+        NLI = React.objects.filter(emoji__in=self.category.NLI.all(), video=self).count()
+        return PHI*self.category.PHI_Vdelta+PLI*self.category.PLI_Vdelta+NHI*self.category.NHI_Vdelta+NLI*self.category.NLI_Vdelta
+
+        # total = 0
+        # for c in self.category.all():
+        #     PHI = PHI + React.objects.filter(emoji__in=self.c.PHI.all(), video=self).count()
+        #     PLI = PLI + React.objects.filter(emoji__in=self.c.PLI.all(), video=self).count()
+        #     NHI = NHI + React.objects.filter(emoji__in=self.c.NHI.all(), video=self).count()
+        #     NLI = NLI + React.objects.filter(emoji__in=self.c.NLI.all(), video=self).count()
+        #     total = total + PHI*self.c.PHI_Vdelta+PLI*self.c.PLI_Vdelta+NHI*self.c.NHI_Vdelta+NLI*self.c.NLI_Vdelta
+        # return total
 
     
 class React(models.Model):
