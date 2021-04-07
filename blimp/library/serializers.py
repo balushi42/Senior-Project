@@ -11,7 +11,16 @@ class CategorySerializer(serializers.ModelSerializer):
 		fields = ['id', 'title']
 		read_only_fields = ['id', 'title']
 
+
 class VideoSerializer(serializers.ModelSerializer):
+	user = UserSerializer()
+	# category = CategorySerializer(read_only=True, many=True)
+	class Meta:
+		model = Video
+		fields = ('id', 'title', 'category', 'user', 'date_uploaded', 'file')
+
+
+class VideoUploadSerializer(serializers.ModelSerializer):
 	def validate(self, data):
 		file = data['file']
 		if not (file.name.endswith('.mp4') or file.name.endswith('.m4v')):
@@ -19,9 +28,8 @@ class VideoSerializer(serializers.ModelSerializer):
 		elif file.size > 10485760:
 			raise LargeFileSize()
 		return data
-
-	user = UserSerializer()
-	category = CategorySerializer(read_only=True, many=True)
+		
+	# category = CategorySerializer(read_only=True, many=True)
 	class Meta:
 		model = Video
 		fields = ('id', 'title', 'category', 'user', 'date_uploaded', 'file')
