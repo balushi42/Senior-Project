@@ -574,6 +574,10 @@ export default Vue.extend({
   background-color: #000;
 }
 
+.video-container:fullscreen {
+  padding-top: 0;
+}
+
 .video {
   position: absolute;
   top: 0;
@@ -581,6 +585,10 @@ export default Vue.extend({
   width: 100%;
   height: 100%;
   vertical-align: bottom;
+}
+
+.video-container:fullscreen > .video {
+  position: relative;
 }
 
 .video-content {
