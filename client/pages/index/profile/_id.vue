@@ -30,9 +30,11 @@ export default Vue.extend({
     let user: User|null;
     let error = false;
 
-    const myFriend = await Api.getFriend(context.app.$axios, Number(context.params.id)) !== null;
+    const myFriend = await Api.getFriend(context.app.$axios, Number(context.params.id));
     let friendStatus = null;
     let disabled = false;
+
+    console.log(myFriend);
 
     if (myFriend !== null) {
       disabled = true;

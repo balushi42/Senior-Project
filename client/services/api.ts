@@ -91,7 +91,7 @@ export default class Api {
         try {
             const friends = await this.getFriends($axios);
             //@ts-ignore
-            return friends.find(f => f.friend === friend);
+            return friends.find(f => f.friend === friend) ?? null;
         } catch (e) {
             throw e;
         }
