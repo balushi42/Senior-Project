@@ -4,7 +4,7 @@
       Blimp
     </NuxtLink>
     <TransitionHeight>
-      <p v-if="detailError.length > 0" class="error mb-3 font-semibold">{{  detailError }}</p>
+      <p v-if="detailError.length > 0" class="error mb-3 font-semibold">{{ detailError }}</p>
     </TransitionHeight>
     <input id="username" type="text" name="username" placeholder="Username" :class="{ 'error': loginErrors.length > 0 }" @input="resetUsername" v-model="username" @keydown.enter="login">
     <TransitionHeight>

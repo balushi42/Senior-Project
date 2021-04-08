@@ -50,6 +50,10 @@ input.error {
   @apply text-left w-full md:w-6/12;
 }
 
+.btn:disabled {
+  @apply cursor-not-allowed bg-gray-400;
+}
+
 p.error,
 div.error {
   @apply text-red-600;

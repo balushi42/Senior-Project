@@ -37,6 +37,11 @@
               Post
             </NuxtLink>
           </li>
+          <li>
+            <NuxtLink to="/pending" tag="a" v-if="loggedIn">
+              Friend Requests
+            </NuxtLink>
+          </li>
 
           <li class="md:ml-auto md:mr-2" v-if="!loggedIn">
             <NuxtLink to="/login" tag="a" class="btn-primary md:rounded-md">
