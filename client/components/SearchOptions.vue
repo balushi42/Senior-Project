@@ -62,7 +62,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .dropdown {
-  @apply w-full md:w-6/12 relative px-4 py-3;
+  @apply w-full md:w-8/12 relative px-4 py-3;
 
   input {
     @apply absolute w-full top-0 left-0;

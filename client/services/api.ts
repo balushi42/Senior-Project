@@ -71,6 +71,14 @@ export default class Api {
         }
     }
 
+    static async getTimeline($axios: NuxtAxiosInstance): Promise<Video[]> {
+        try {
+            return await $axios.$get('/api/v1/timeline/');
+        } catch (e) {
+            throw e;
+        }
+    }
+
     static async getVideoDetail($axios: NuxtAxiosInstance, videoId: string): Promise<Video> {
         try {
             return await $axios.$get(`/api/v1/videos/${videoId}`);

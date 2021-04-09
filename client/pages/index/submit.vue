@@ -1,11 +1,11 @@
 <template>
-  <div class="container mx-auto p-3 md:p-0">
+  <div class="container mx-auto p-3 md:p-0 w-full max-w-3xl">
     <div class="text-3xl font-semibold pt-3 pb-5">Post a new highlight</div>
     <TransitionHeight>
       <p v-if="detailError.length > 0" class="error mb-3 font-semibold">{{  detailError }}</p>
     </TransitionHeight>
 
-    <input type="text" placeholder="Title" v-model="title" :class="{'error': titleErrors.length > 0}" @input="input" />
+    <input class="w-8/12" type="text" placeholder="Title" v-model="title" :class="{'error': titleErrors.length > 0}" @input="input" />
     <TransitionHeight>
       <div v-if="titleErrors.length > 0" class="input-help error">
         <div v-for="error in titleErrors" :key="error">

@@ -10,11 +10,7 @@
       <div class="video-card-container">
         <Video class="video-card-video" :sources="video.sources" :options="options" :videoId="id" :category="category"/>
       </div>
-      <div class="video-card-footer">
-        <div class="select-none">&nbsp;</div>
-        <button class="btn btn-link btn-report">Report</button>
-      </div>
-      <h3 class="text-xl">Comments</h3>
+      <h3 class="text-xl mt-3">Reactions</h3>
     </article>
     <div v-if="error" class="text-center text-3xl">
       Video not found!

@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto p-3 md:p-0 mt-5">
+  <div class="container mx-auto p-3 md:p-0 mt-5 w-full max-w-3xl">
+    <div class="text-3xl font-semibold pt-3 pb-5">Profile</div>
     <div class="user-card" v-if="!error">
       <div class="user-card-header">
         <h1 class="user-card-title">@{{ user.username }}</h1>
@@ -33,8 +34,6 @@ export default Vue.extend({
     const myFriend = await Api.getFriend(context.app.$axios, Number(context.params.id));
     let friendStatus = null;
     let disabled = false;
-
-    console.log(myFriend);
 
     if (myFriend !== null) {
       disabled = true;

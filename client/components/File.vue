@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center w-full md:w-6/12">
+  <div class="flex justify-center items-center w-full md:w-8/12">
     <label class="border-2 border-dashed rounded-md p-4 cursor-pointer w-full" @dragenter="enter" @dragover="enter" @dragleave="leave" @dragend="leave" @drop.stop="drop" :class="{'drag-over': draggingOver, 'file-error': error && !draggingOver}" @change="change">
       <div class="w-full text-center text-2xl pointer-events-none"><Fa icon="upload"/></div>
       <div class="font-semibold text-center pointer-events-none">{{ file }}</div>

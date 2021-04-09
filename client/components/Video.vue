@@ -453,7 +453,6 @@ export default Vue.extend({
       const target = e.target as HTMLElement;
 
       if (!target.parentElement) return;
-      console.log(e, category);
 
       this.reaction.options = this.category[category];
       const keys = Object.keys(this.reaction.active);
@@ -656,7 +655,7 @@ export default Vue.extend({
   bottom: 0;
   height: 2rem;
   width: 100%;
-  z-index: 2147483647;
+  z-index: 2147483646;
   background: rgba(0, 0, 0, 0.281);
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-3 md:p-0">
+  <div class="container mx-auto p-3 md:p-0 w-full max-w-3xl">
     <div v-if="!error">
       <div class="text-3xl font-semibold pt-3 pb-5">Pending Friend Requests</div>
       <article v-for="friend of pending" :key="friend.creator" class="w-full flex justify-between border-2 border-solid border-gray-200 rounded-md p-4 mb-3">

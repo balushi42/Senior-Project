@@ -23,8 +23,8 @@
             </div>
           </div>
           <li>
-            <NuxtLink to="/" tag="a">
-              Home
+            <NuxtLink to="/timeline" tag="a" v-if="loggedIn">
+              Timeline
             </NuxtLink>
           </li>
           <li>
