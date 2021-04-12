@@ -310,6 +310,7 @@ export default Vue.extend({
     setVideoByTime(percent: number) {
       this.video.pos.current = percent * 100;
       const video = this.$refs.video as HTMLVideoElement;
+
       video.currentTime = video.duration * percent;
     },
     screenClick() {

@@ -11,10 +11,6 @@
       <div class="video-card-container">
         <Video class="video-card-video" :sources="video.sources" :options="options" :videoId="video.id" :category="categories[video.id]"/>
       </div>
-      <div class="video-card-footer">
-        <NuxtLink :to="`/video/${video.id}`">{{ 0 }} comments</NuxtLink>
-        <button class="btn btn-link btn-report">Report</button>
-      </div>
     </article>
     <div v-if="videos.length < 1" class="text-center text-3xl w-full max-w-3xl md:mx-auto">
       Nothing In Your Timeline

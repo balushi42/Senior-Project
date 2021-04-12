@@ -6,7 +6,6 @@
         <h1 class="user-card-title">@{{ user.username }}</h1>
         <div>
           <button class="btn btn-primary" :class="{ loading }" :disabled="disabled" @click="addFriend(user.id)">{{ status === 'Pending' ? status : (status === 'Accepted' ? 'Friend' : 'Add Friend') }}</button>
-          <button class="btn btn-link">Report</button>
         </div>
       </div>
       <div>
@@ -69,7 +68,6 @@ export default Vue.extend({
         this.disabled = friend.status !== null;
         //@ts-ignore
         this.status = friend.status;
-        console.log(friend);
       } catch (e) {
         console.error(e.response.data);
       } finally {

@@ -51,8 +51,8 @@ export interface PostReaction {
     video: number;
 }
 
-export interface PostReactionParsed extends Omit<PostReaction, 'timestamp'> {
-    timestamp: number;
+export interface PostReactionParsed extends PostReaction {
+    moment: number;
 }
 
 export type PostReactions = Record<'reactions', PostReaction[]>;
@@ -248,7 +248,7 @@ export default class Api {
                 total += Number(pieces[2]);
 
                 //@ts-ignore
-                reaction.timestamp = total;
+                reaction.moment = total;
             }
 
             //@ts-ignore

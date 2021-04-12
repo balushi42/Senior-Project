@@ -10,9 +10,9 @@
       <div class="video-card-container">
         <Video class="video-card-video" :sources="video.sources" :options="options" :videoId="id" :category="category" @progress="progress"/>
       </div>
-      <h3 class="text-xl mt-3">Reactions</h3>
-      <div v-for="reaction in displayedReactions" :key="reaction.date">
-        {{ reaction.text }}
+      <h3 class="text-xl mt-3 pb-2">Reactions</h3>
+      <div class="p-1" v-for="reaction in displayedReactions" :key="reaction.date">
+        <span class="border-r-2 border-solid border-gray-300 pr-1 mr-1 text-gray-500">{{ reaction.timestamp }}</span>{{ reaction.text }}
       </div>
     </article>
     <div v-if="error" class="text-center text-3xl">
@@ -40,7 +40,7 @@ export default Vue.extend({
 
       category = await Api.getReactionOptions(context.app.$axios, res.category);
       reactions = await Api.getReactions(context.app.$axios, Number(context.params.id));
-      reactions.sort((a, b) => a.timestamp - b.timestamp);
+      reactions.sort((a, b) => a.moment - b.moment);
 
       video = res;
     } catch (e) {
@@ -70,7 +70,7 @@ export default Vue.extend({
       //@ts-ignore
       const reactions = this.reactions as PostReactionParsed[];
 
-      this.displayedReactions = reactions.filter(reaction => reaction.timestamp < total);
+      this.displayedReactions = reactions.filter(reaction => reaction.moment <= total);
     }
   }
 });
