@@ -159,6 +159,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      lastTime: '',
       reactionText: '',
       selectedEmoji: {} as {id: string, text: string},
       showModal: false,
@@ -344,6 +345,12 @@ export default Vue.extend({
       this.video.displayTime = timeParse(
         this.$video.duration - this.$video.currentTime
       );
+
+      const newTime = `00:${timeParse(this.$video.currentTime)}`;
+      if (newTime !== this.lastTime) {
+        this.$emit('progress', newTime);
+        this.lastTime = newTime;
+      }
     },
     volMove() {
       this.initVol();

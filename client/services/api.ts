@@ -42,6 +42,21 @@ export interface PendingFriendRequest extends PendingFriend {
     user?: User;
 }
 
+export interface PostReaction {
+    emoji: number;
+    text: string;
+    user: number;
+    timestamp: string;
+    date: string;
+    video: number;
+}
+
+export interface PostReactionParsed extends Omit<PostReaction, 'timestamp'> {
+    timestamp: number;
+}
+
+export type PostReactions = Record<'reactions', PostReaction[]>;
+
 export default class Api {
     static async signup($axios: NuxtAxiosInstance, email: string, username: string, password: string) {
         try {
@@ -218,6 +233,26 @@ export default class Api {
             }
 
             return reactions;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    static async getReactions($axios: NuxtAxiosInstance, videoId: number): Promise<PostReactionParsed[]> {
+        try {
+            const reactions: PostReaction[] = (await $axios.$get(`/api/v1/reactions/${videoId}/`))['reactions'];
+            for (const reaction of reactions) {
+                const pieces = reaction.timestamp.split(':');
+                let total = Number(pieces[0]) * 60 * 60;
+                total += Number(pieces[1]) * 60;
+                total += Number(pieces[2]);
+
+                //@ts-ignore
+                reaction.timestamp = total;
+            }
+
+            //@ts-ignore
+            return reactions as PostReactionParsed[];
         } catch (e) {
             throw e;
         }
