@@ -30,25 +30,27 @@ export default Vue.extend({
     let error = false;
     let category;
     let reactions;
+    let id: number;
 
     try {
-      const res = await Api.getVideoDetail(context.app.$axios, context.params.id);
-      res.sources = [{
-        src: `http://localhost:8000${res.file}`,
+      id = Number(context.params.id);
+
+      [video, reactions] = await Promise.all([Api.getVideoDetail(context.app.$axios, id), Api.getReactions(context.app.$axios, id)]);
+      video.sources = [{
+        src: `http://localhost:8000${video.file}`,
         type: 'video/mp4'
       }];
 
-      category = await Api.getReactionOptions(context.app.$axios, res.category);
-      reactions = await Api.getReactions(context.app.$axios, Number(context.params.id));
+      reactions = reactions.filter(reaction => reaction.text !== '');
       reactions.sort((a, b) => a.moment - b.moment);
 
-      video = res;
+      category = await Api.getReactionOptions(context.app.$axios, video.category);
     } catch (e) {
       error = true;
     }
 
     //@ts-ignore
-    return { video, error, category, id: Number(context.params.id), reactions };
+    return { video, error, category, id, reactions };
   },
   data () {
     return {

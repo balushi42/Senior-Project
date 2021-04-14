@@ -8,12 +8,6 @@
           <button class="btn btn-primary" :class="{ loading }" :disabled="disabled" @click="addFriend(user.id)">{{ status === 'Pending' ? status : (status === 'Accepted' ? 'Friend' : 'Add Friend') }}</button>
         </div>
       </div>
-      <div>
-        Last Active: 4/6/2021 5:58pm
-      </div>
-      <div>
-        Account Created: 3/30/2021 2:09pm
-      </div>
     </div>
     <div v-if="error" class="text-center text-3xl">
       User not found!
@@ -23,29 +17,29 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Api, { User } from '~/services/api';
+import Api from '~/services/api';
 
 export default Vue.extend({
   async asyncData(context) {
-    let user: User|null;
+    const id = Number(context.params.id);
+
     let error = false;
-
-    const myFriend = await Api.getFriend(context.app.$axios, Number(context.params.id));
-    let friendStatus = null;
     let disabled = false;
-
-    if (myFriend !== null) {
-      disabled = true;
-      friendStatus = 'Accepted';
-    } else {
-      friendStatus = await Api.getPendingFriend(context.app.$axios, Number(context.params.id));
-      disabled = friendStatus !== null;
-    }
+    let friendStatus;
+    let user;
 
     try {
-      const res = await Api.getProfile(context.app.$axios, context.params.id);
+      const [userFriend, status, profile] = await Promise.all([Api.getFriend(context.app.$axios, id), Api.getPendingFriend(context.app.$axios, id), Api.getProfile(context.app.$axios, id)]);
 
-      user = res;
+      if (userFriend !== null) {
+        disabled = true;
+        friendStatus = 'Accepted';
+      } else {
+        friendStatus = status;
+        disabled = friendStatus !== null;
+      }
+
+      user = profile;
     } catch (e) {
       error = true;
     }

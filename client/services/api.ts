@@ -94,7 +94,7 @@ export default class Api {
         }
     }
 
-    static async getVideoDetail($axios: NuxtAxiosInstance, videoId: string): Promise<Video> {
+    static async getVideoDetail($axios: NuxtAxiosInstance, videoId: number): Promise<Video> {
         try {
             return await $axios.$get(`/api/v1/videos/${videoId}`);
         } catch (e) {
@@ -143,7 +143,7 @@ export default class Api {
             pending = pending.filter(p => p.creator !== me);
 
             for (let friend of pending) {
-                friend.user = await this.getProfile($axios, friend.creator.toString());
+                friend.user = await this.getProfile($axios, friend.creator);
             }
 
             return pending;
@@ -198,7 +198,7 @@ export default class Api {
         }
     }
 
-    static async getProfile($axios: NuxtAxiosInstance, userId: string): Promise<User> {
+    static async getProfile($axios: NuxtAxiosInstance, userId: number): Promise<User> {
         try {
             const res = await $axios.$get(`/api/v1/people/${userId}`);
             return res.user;

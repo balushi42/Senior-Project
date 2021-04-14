@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="video-card-container">
-        <Video class="video-card-video" :sources="video.sources" :options="options" :videoId="video.id" :category="categories[video.id]"/>
+        <Video class="video-card-video" :sources="video.sources" :options="options" :videoId="video.id" :category="categories[video.category]"/>
       </div>
     </article>
   </div>
@@ -25,6 +25,7 @@ export default Vue.extend({
   async asyncData(context) {
     const videos = await Api.getViralVideos(context.app.$axios);
     let categories: Record<number, Reactions> = {};
+    let allCategories: number[] = [];
 
     for (let video of videos) {
       video.sources = [{
@@ -32,9 +33,19 @@ export default Vue.extend({
         type: 'video/mp4'
       }];
 
-      if (!categories[video.category]) {
-        categories[video.category] = await Api.getReactionOptions(context.app.$axios, video.category);
+      if (!allCategories.includes(video.category)) {
+        allCategories.push(video.category);
       }
+    }
+
+    const promises: Promise<Reactions>[] = [];
+    for (const category of allCategories) {
+      promises.push(Api.getReactionOptions(context.app.$axios, category));
+    }
+
+    const results = await Promise.all(promises);
+    for (let i = 0; i < allCategories.length; i++) {
+      categories[allCategories[i]] = results[i];
     }
 
     return { videos, categories };
