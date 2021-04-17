@@ -270,18 +270,20 @@ export default class Api {
         }
     }
 
-    static async newPost($axios: NuxtAxiosInstance, title: string, category: number, file: File) {
+    static async newPost($axios: NuxtAxiosInstance, title: string, category: number, file: File): Promise<Video> {
         const form = new FormData();
         form.append('file', file);
         form.append('title', title);
         form.append('category', category.toString());
 
         try {
-            await $axios.post('/api/v1/videos/upload/', form, {
+            const res = await $axios.post('/api/v1/videos/upload/', form, {
                 headers: {
                 'Content-Type': 'multipart/form-data'
                 }
             });
+
+            return res.data;
         } catch (e) {
             throw e;
         }
