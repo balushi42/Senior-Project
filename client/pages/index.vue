@@ -82,6 +82,8 @@ export default Vue.extend({
     logout() {
       this.$auth.logout();
       this.loggedIn = false;
+
+      this.$router.push('/popular');
     },
     open () {
       if (this.transitioning) return;

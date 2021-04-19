@@ -20,7 +20,20 @@ python3 manage.py loaddata DB.json
 
 python3 manage.py runserver
 
-## api endpoints
+## Node setup:
+
+Install node (https://nodejs.org/en/download/)
+
+## Client setup:
+
+Navigate to /client \
+Run the command `npm i`
+
+## Start client server:
+
+Navigate to /client \
+npm run dev
+## Api endpoints:
 
 - /api/v1/register/
   * {POST}

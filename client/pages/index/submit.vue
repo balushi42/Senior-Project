@@ -78,7 +78,8 @@ export default Vue.extend({
       this.loading = true;
 
       try {
-        await Api.newPost(this.$axios, this.title, this.category ?? 0, this.file!);
+        const video = await Api.newPost(this.$axios, this.title, this.category ?? 0, this.file!);
+        this.$router.push(`/video/${video.id}`);
 
         this.detailError = '';
         this.titleErrors = [];
