@@ -1,5 +1,9 @@
 # Senior-Project
 
+## Quick setup(requires docker and docker-compose):
+
+docker-compose up -d
+
 ## python venv setup:
 
 python3 -m venv venv
