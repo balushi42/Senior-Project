@@ -43,7 +43,7 @@
     {% for V in videos %}
       <tr>
         <td><a href="{% url 'chart_detail_view' V.pk %}">{{V.title}}</a></td>
-        <td><a href="{% url 'chart_category_view' V.pk %}">{{V.category}}</a></td>
+        <td><a href="{% url 'chart_category_view' V.category.pk %}">{{V.category}}</a></td>
         <td>{{V.date_uploaded}}</td>
         <td>{{V.user}}</td>
         <td>{{V.reactions.count}}</td>

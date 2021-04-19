@@ -186,7 +186,8 @@ def Chart_View(request):
 
 
 def Chart_Category_View(request,pk):
-    videos = Video.objects.filter(category=pk)
+    category = get_object_or_404(Category,pk=pk)
+    videos = Video.objects.filter(category=category)
     return render(request, 'Category_Chart.html', {"videos":videos})
 
 
