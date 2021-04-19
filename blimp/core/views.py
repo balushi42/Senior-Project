@@ -4,7 +4,7 @@ from rest_framework import permissions, status
 from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.db.models import Avg, Max, Min, F
+from django.db.models import Avg, Max, Min, F, ExpressionWrapper, FloatField
 
 from library.models import *
 from core.serializers import *
@@ -180,8 +180,8 @@ def Chart_View(request):
     avg_viral = videos.aggregate(Avg('viral'))
     max_viral = videos.order_by('-viral').first().viral-avg_viral['viral__avg']
     min_viral = videos.order_by('viral').first().viral-avg_viral['viral__avg']
-    videos = videos.annotate(vscore=(F('viral')-avg_viral['viral__avg']-min_viral)/(max_viral-min_viral))
-    print(avg_viral,max_viral,min_viral)
+    videos = videos.annotate(vscore=ExpressionWrapper((F('viral')-avg_viral['viral__avg']-min_viral)/(max_viral-min_viral), output_field=FloatField()))
+    print((videos.first().viral,avg_viral['viral__avg'],min_viral,max_viral))
     return render(request, 'Content_Chart.html', {"videos":videos})
 
 
