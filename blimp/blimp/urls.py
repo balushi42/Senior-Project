@@ -47,7 +47,11 @@ urlpatterns = [
     path('api/v1/categories/', library_views.category_list, name='category_list'),
     re_path(r'api/v1/categories/(?P<pk>[0-9]+)/', library_views.category_detail, name="category_detail"),
 
-    re_path(r'charts/(?P<pk>[0-9]+)/', core_views.Chart_View, name='chart_view'),
+    re_path(r'charts/(?P<pk>[0-9]+)/', core_views.Chart_Detail_View, name='chart_detail_view'),
+    re_path(r'charts/category/(?P<pk>[0-9]+)/', core_views.Chart_Category_View, name='chart_category_view'),
+    re_path(r'charts/category/viral/(?P<pk>[0-9]+)/', core_views.Chart_Viral_View, name='chart_viral_view'),
+    re_path(r'charts/category/group/(?P<pk>[0-9]+)/', core_views.Chart_Group_View, name='chart_group_view'),
+    path('charts/', core_views.Chart_View, name='chart_view'),
     
 
 ]

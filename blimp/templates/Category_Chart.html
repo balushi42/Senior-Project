@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Category Chart</title>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+  <div class="container">
+  <h2>Category Metrics Table</h2>
+  <p>Over all view of {{videos.first.category.name}} Category</p>            
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Content Title:</th>
+        <th>Date Uploaded:</th>
+        <th>Uploaded By:</th>
+        <th>Number of reactions:</th>
+        <th>Group Value:</th>
+        <th>Viral Value:</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for V in videos %}
+      <tr>
+        <td><a href="{% url 'chart_detail_view' V.pk %}">{{V.title}}</a></td>
+        <td>{{V.date_uploaded}}</td>
+        <td>{{V.user}}</td>
+        <td>{{V.reactions.count}}</td>
+        <td><a href="{% url 'chart_group_view' V.pk %}">{{V.group}}</a></td>
+        <td><a href="{% url 'chart_viral_view' V.pk %}">{{V.viral}}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+  </body>
+</html>

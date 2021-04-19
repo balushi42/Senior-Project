@@ -17,6 +17,12 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+    .chartStyle {
+        height: 10vh;
+    }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -30,8 +36,9 @@
     G-Value: {{video.group}}
 </div>
 <div class="row">
-    V-Value: {{video.viral}}
+    Average G-value: {{avg_gval}}
 </div>
+
 <div class="row">
     <canvas id="myChart" style="height: 100vh;"></canvas>
 </div>
@@ -40,19 +47,14 @@
 var data = {
         labels: [{% for l in labels %}'{{ l }}'{%if not forloop.last%},{%endif%}{% endfor %}],
         datasets: [{
-            label: 'PHI',
-            data: [{% for i in PHI_data %}{{ i }}{%if not forloop.last%},{%endif%}{% endfor %}],
+            label: 'G-val',
+            data: [{% for i in gval_data %}{{ i }}{%if not forloop.last%},{%endif%}{% endfor %}],
         },{
-            label: 'PLI',
-            data: [{% for i in PLI_data %}{{ i }}{%if not forloop.last%},{%endif%}{% endfor %}],
-        },{
-            label: 'NHI',
-            data: [{% for i in NHI_data %}{{ i }}{%if not forloop.last%},{%endif%}{% endfor %}],
-        },{
-            label: 'NLI',
-            data: [{% for i in NLI_data %}{{ i }}{%if not forloop.last%},{%endif%}{% endfor %}],
+            label: 'Avg-G-val',
+            data: [{% for i in avg_gval_data %}{{ i }}{%if not forloop.last%},{%endif%}{% endfor %}],
         }]
     }
+
 
 var ctx = new Chart(document.getElementById("myChart").getContext("2d"), {
     type: "line",
