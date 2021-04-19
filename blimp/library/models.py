@@ -72,7 +72,7 @@ class Video(models.Model):
     
 class React(models.Model):
     emoji = models.ForeignKey(Emoji, on_delete=models.PROTECT, related_name="reactions")
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=50,blank=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name="reactions")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reactions")
     date = models.DateTimeField(auto_now_add=True)

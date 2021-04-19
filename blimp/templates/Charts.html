@@ -9,7 +9,7 @@
     <style>
     .chartStyle {
         border: 2px solid #ccc;
-        padding: 10px;
+        padding: 300px;
         width: 20em;
     }
     </style>
@@ -28,7 +28,7 @@
     <canvas class="chartStyle" id="myChart"></canvas>
 <script>
 var defaultData = [{{ PHI_VAL }},{{ PLI_VAL }},{{ NHI_VAL }},{{ NLI_VAL }}]
-var labels = ['PHI','PLI','NHI','NLA'];
+var labels = ['PHI','PLI','NHI','NLI'];
 
 var ctx = document.getElementById('myChart')
 var myChart = new Chart(ctx, {
